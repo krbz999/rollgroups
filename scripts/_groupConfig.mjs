@@ -8,13 +8,13 @@ export class GroupConfig extends FormApplication {
             closeOnSubmit: true,
             width: "auto",
             height: "auto",
-            template: "/modules/formulagroups/templates/group_config.html",
-            classes: ["formulagroups"]
+            template: "/modules/rollgroups/templates/group_config.html",
+            classes: ["rollgroups"]
         });
     }
 
     get id(){
-        return `formulagroups-groupconfig-${this.object.id}`;
+        return `rollgroups-groupconfig-${this.object.id}`;
     }
 
     // the base damage parts.
@@ -26,7 +26,7 @@ export class GroupConfig extends FormApplication {
     }
 
     get groups(){
-        const flags = this.object.getFlag("formulagroups", "config.groups") ?? [
+        const flags = this.object.getFlag("rollgroups", "config.groups") ?? [
             {label: "Damage", parts: Array.fromRange(this.parts.length)}
         ];
         for ( let i = 0; i < flags.length; i++ ) {
@@ -39,7 +39,6 @@ export class GroupConfig extends FormApplication {
         const data = await super.getData();
         data.parts = this.parts;
         data.groups = this.groups;
-        console.log("GETDATA, THIS.PARTS", this.parts);
         return data;
     }
     
@@ -64,7 +63,7 @@ export class GroupConfig extends FormApplication {
             column = html.querySelector(`.group-header [data-group-index='${groupIndex}']`);
         }
         console.log(groups);
-        return this.object.setFlag("formulagroups", "config.groups", groups);
+        return this.object.setFlag("rollgroups", "config.groups", groups);
 	}
 
 	activateListeners(html){
