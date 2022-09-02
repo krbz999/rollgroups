@@ -1,0 +1,32 @@
+<form class="formulagroups">
+    <div class="inputs flexrow">
+        <div class="flexcol">
+            <div class="damage-header">
+                Formula
+            </div>
+            {{#each parts as |part|}}
+            <div class="damage-part">
+                {{part.formula}} ({{part.type}})
+            </div>
+            {{/each}}
+        </div>
+        {{#each groups as |group|}}
+        <div class="flexcol">
+            <div class="group-header">
+                <input type="text" value="{{group.label}}" data-group-index="{{group.index}}">
+            </div>
+            {{#each ../parts as |part|}}
+            <div class="check">
+                <input type="checkbox" checked="{{checkgroup group.parts part.index}}" data-group-index="{{group.index}}" data-part-index="{{part.index}}" >
+            </div>
+            {{/each}}
+        </div>
+        {{/each}}
+    </div>
+    <hr>
+    <div class="footer">
+        <button name="submit">
+            <i class="fas fa-save"></i> Save
+        </button>
+    </div>
+</form>
