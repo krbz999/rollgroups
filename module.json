@@ -7,11 +7,13 @@
             "name": "Zhell",
             "url": "https://github.com/krbz999",
             "discord": "Zhell#9201",
-            "flags": {}
+            "ko-fi": "https://ko-fi.com/zhell"
         }
     ],
     "compatibility": {
-        "minimum": "10"
+        "minimum": "10",
+        "maximum": "10",
+        "verified": "10.284"
     },
     "esmodules": [
         "setup.js"
@@ -25,7 +27,10 @@
                 "id": "dnd5e",
                 "type": "system",
                 "manifest": "https://raw.githubusercontent.com/foundryvtt/dnd5e/master/system.json",
-                "compatibility": {}
+                "compatibility": {
+                    "minimum": "2.0.0",
+                    "verified": "2.0.2"
+                }
             }
         ]
     },
@@ -41,5 +46,5 @@
     "license": "https://raw.githubusercontent.com/krbz999/babonus/main/LICENSE",
     "manifest": "https://github.com/krbz999/rollgroups/releases/latest/download/module.json",
     "download": "https://github.com/krbz999/rollgroups/releases/download/v0.0.1/module.zip",
-    "description": ""
+    "description": "This module adds the ability on items to group the damage formulas, with a damage button in the chat card for each group."
 }
