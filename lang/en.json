@@ -1,3 +1,7 @@
 {
-    "ROLLGROUPS": {}
+    "ROLLGROUPS": {
+        "WARN": {
+            "NO_FORMULAS": "The roll group contains no formulas."
+        }
+    }
 }

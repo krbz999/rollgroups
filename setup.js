@@ -10,13 +10,16 @@ Hooks.on("dnd5e.preDisplayCard", (item, data) => {
     if ( !groups?.length ) return;
 
     const dmg = document.createElement("DIV");
-    const group = groups.reduce(({label, parts}) => {
-        return acc + `<button
-        data-action="rollgroup-damage"
-        data-group-parts="${parts.join(";")}"
-        data-item-uuid="${item.uuid}"
-        >${label}</button>`;
-    });
+    const group = groups.reduce((acc, {label, parts}) => {
+        const r = "rollgroup-damage";
+        const p = parts.join(";");
+        const u = item.uuid;
+        return acc + `
+        <button data-action="${r}" data-group-parts="${p}" data-item-uuid="${u}">
+            ${label}
+        </button>
+        `;
+    }, "");
     dmg.innerHTML = group;
     damageButton.after(...dmg.children);
     damageButton.remove();
@@ -27,8 +30,9 @@ Hooks.on("renderChatLog", (chatLog, html) => {
     html[0].addEventListener("click", (event) => {
         const button = event.target.closest("button[data-action='rollgroup-damage']");
         if ( !button ) return;
-        let {itemUuid, parts} = button.dataset;
-        const {level, messageId} = button.closest(".item-card").dataset;
+        let {itemUuid, groupParts} = button.dataset;
+        const {messageId} = button.closest(".chat-message.message.flexcol").dataset;
+        const {spellLevel} = button.closest(".dnd5e.chat-card.item-card").dataset;
         const message = game.messages.get(messageId);
         const itemData = message.getFlag("dnd5e", "itemData");
 
@@ -38,15 +42,18 @@ Hooks.on("renderChatLog", (chatLog, html) => {
         } else {
             // create temporary item from itemData.
         }
-        parts = parts.split(";").reduce((acc, i) => {
-            acc.push( item.system.damage.parts[i] );
+        const parts = item.system.damage.parts;
+        groupParts = groupParts.split(";").reduce((acc, i) => {
+            if ( i < parts.length ) acc.push( parts[i] );
             return acc;
         }, []);
-        const clone = item.clone({
-            "system.damage.parts": parts,
-            "system.level": level !== undefined ? Number(level) : undefined
-        }, {keepId: true});
-        return clone.rollDamage({event});
+        if ( !groupParts.length ) {
+            ui.notifications.error(game.i18n.localize("ROLLGROUPS.WARN.NO_FORMULAS"));
+            return;
+        }
+        const clone = item.clone({ "system.damage.parts": groupParts }, {keepId: true});
+        clone.prepareData();
+        return clone.rollDamage({spellLevel, event});
     });
 });
 
