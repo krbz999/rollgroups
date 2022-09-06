@@ -7,7 +7,8 @@ Hooks.on("dnd5e.preDisplayCard", (item, data) => {
     if ( !damageButton ) return;
 
     const groups = item.getFlag("rollgroups", "config.groups");
-    if ( !groups?.length ) return;
+    const validFormulas = item.system.damage?.parts.filter(([f]) => !!f).length;
+    if ( !groups?.length || validFormulas < 2 ) return;
 
     const dmg = document.createElement("DIV");
     const group = groups.reduce((acc, {label, parts}) => {
@@ -43,11 +44,11 @@ Hooks.on("renderChatLog", (chatLog, html) => {
             // create temporary item from itemData.
         }
         const parts = item.system.damage.parts;
-        groupParts = groupParts.split(";").reduce((acc, i) => {
+        if ( groupParts ) groupParts = groupParts.split(";").reduce((acc, i) => {
             if ( i < parts.length ) acc.push( parts[i] );
             return acc;
         }, []);
-        if ( !groupParts.length ) {
+        if ( !groupParts?.length ) {
             ui.notifications.error(game.i18n.localize("ROLLGROUPS.WARN.NO_FORMULAS"));
             return;
         }

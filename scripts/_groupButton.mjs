@@ -1,7 +1,7 @@
 import { GroupConfig } from "./_groupConfig.mjs";
 
 export function createGroupButton(item, html){
-    const length = item.system.damage?.parts.length;
+    const length = item.system.damage?.parts.filter(([f]) => !!f).length;
     if ( !length || length < 2 ) return;
     const damageHeader = html[0].querySelector("h4.damage-header");
     if ( !damageHeader ) return;
@@ -11,7 +11,7 @@ export function createGroupButton(item, html){
     damageHeader.firstChild.after(editButton);
 
     // create listener.
-    editButton.addEventListener("click", (event) => {
+    editButton.addEventListener("click", () => {
         new GroupConfig(item, {
             title: `Group Config: ${item.name}`
         }).render(true);
