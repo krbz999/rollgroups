@@ -1,6 +1,7 @@
 import { GroupConfig } from "./_groupConfig.mjs";
 
 export function createGroupButton(item, html){
+    if ( !item.sheet.isEditable ) return;
     const length = item.system.damage?.parts.filter(([f]) => !!f).length;
     if ( !length || length < 2 ) return;
     const damageHeader = html[0].querySelector("h4.damage-header");
