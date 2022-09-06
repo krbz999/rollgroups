@@ -1,7 +1,8 @@
 {
     "ROLLGROUPS": {
         "WARN": {
-            "NO_FORMULAS": "The roll group contains no formulas."
+            "NO_FORMULAS": "The roll group contains no formulas.",
+            "NO_ACTOR": "The owner of this item no longer exists."
         }
     }
 }

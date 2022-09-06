@@ -15,8 +15,9 @@ Hooks.on("dnd5e.preDisplayCard", (item, data) => {
         const r = "rollgroup-damage";
         const p = parts.join(";");
         const u = item.uuid;
+        const a = item.parent.uuid;
         return acc + `
-        <button data-action="${r}" data-group-parts="${p}" data-item-uuid="${u}">
+        <button data-action="${r}" data-group-parts="${p}" data-item-uuid="${u}" data-actor-uuid="${a}">
             ${label}
         </button>
         `;
@@ -31,7 +32,7 @@ Hooks.on("renderChatLog", (chatLog, html) => {
     html[0].addEventListener("click", (event) => {
         const button = event.target.closest("button[data-action='rollgroup-damage']");
         if ( !button ) return;
-        let {itemUuid, groupParts} = button.dataset;
+        let {itemUuid, groupParts, actorUuid} = button.dataset;
         const {messageId} = button.closest(".chat-message.message.flexcol").dataset;
         const {spellLevel} = button.closest(".dnd5e.chat-card.item-card").dataset;
         const message = game.messages.get(messageId);
@@ -42,6 +43,12 @@ Hooks.on("renderChatLog", (chatLog, html) => {
             item = fromUuidSync(itemUuid);
         } else {
             // create temporary item from itemData.
+            const actor = fromUuidSync(actorUuid);
+            if ( !actor ) {
+                ui.notifications.error(game.i18n.localize("ROLLGROUPS.WARN.NO_ACTOR"));
+                return;
+            }
+            item = new Item.implementation(itemData, { parent: actor });
         }
         const parts = item.system.damage.parts;
         if ( groupParts ) groupParts = groupParts.split(";").reduce((acc, i) => {
