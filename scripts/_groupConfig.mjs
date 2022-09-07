@@ -24,21 +24,7 @@ export class GroupConfig extends FormApplication {
     }
 
     get groups(){
-        let flags = this.object.getFlag("rollgroups", "config.groups");
-        if ( !flags?.length ) return false;
-
-        const groups = flags.map(({ label, parts }) => {
-            const head = `<div class="group-header"><input type="text" value="${label}"></div>`;
-            let rows = "";
-            for ( let i = 0; i < this.parts.length; i++ ) {
-                if ( parts.includes(i) ) {
-                    rows += `<div class="group-row"><input type="checkbox" checked></div>`;
-                }
-                else rows += `<div class="group-row"><input type="checkbox"></div>`;
-            }
-            return head + rows;
-        });
-        return groups;
+        return this.columnHelper("dataGet");
     }
 
     async getData(){
@@ -57,10 +43,7 @@ export class GroupConfig extends FormApplication {
         }
         else {
             // if no groups, then create a single group with all formulas checked.
-            const length = this.parts.length;
-            let group = `<div class="group-header"><input type="text" value="Name"></div>`;
-            const row = `<div class="group-row"><input type="checkbox" checked></div>`;
-            group += Array.fromRange(length).fill(row).join("");
+            const group = this.columnHelper("empty");
             data.groups = [group];
         }
         return data;
@@ -72,12 +55,10 @@ export class GroupConfig extends FormApplication {
         const groupNodes = this.form.querySelectorAll("[name='rollgroup-groups']");
         const groups = [];
         for ( let group of groupNodes ) {
-            const label = group.querySelector(".group-header > input").value || "Damage";
+            let label = group.querySelector(".group-header > input").value;
+            if ( !label ) label = game.i18n.localize("ROLLGROUPS.CONFIG.DAMAGE");
             const boxes = group.querySelectorAll(".group-row > input");
-            const parts = [];
-            for ( let i = 0; i < boxes.length; i++ ) {
-                if ( boxes[i].checked ) parts.push(i);
-            }
+            const parts = Array.fromRange(boxes.length).filter(i => boxes[i].checked);
             if ( !parts.length ) parts.push(0);
             groups.push({ label, parts });
         }
@@ -92,13 +73,8 @@ export class GroupConfig extends FormApplication {
             const form = button?.closest(".app.window-app.rollgroups");
             
             if ( name === "add" ) {
-                const length = this.parts.length;
-
                 // create new column element.
-                let group = `<div class="group-header"><input type="text" value="Name"></div>`;
-                const row = `<div class="group-row"><input type="checkbox" checked></div>`;
-                const foot = `<div class="group-delete trigger" name="delete"> <a class="delete-button"> <i class="fas fa-trash"></i> </a> </div>`;
-                group += Array.fromRange(length).fill(row).join("") + foot;
+                const group = this.columnHelper("add");
                 const div = document.createElement("DIV");
                 div.classList.add("flexcol");
                 div.setAttribute("name", "rollgroup-groups");
@@ -122,4 +98,36 @@ export class GroupConfig extends FormApplication {
             }
         });
 	}
+
+    columnHelper(util = "add"){
+        const length = this.parts.length;
+        const placeholder = game.i18n.localize("ROLLGROUPS.CONFIG.PLACEHOLDER");
+
+        if ( ["add", "empty"].includes(util) ) {
+            let group = `<div class="group-header"><input type="text" value="Name" placeholder="${placeholder}"></div>`;
+            const row = `<div class="group-row"><input type="checkbox" checked></div>`;
+            const foot = `<div class="group-delete trigger" name="delete"> <a class="delete-button"> <i class="fas fa-trash"></i> </a> </div>`;
+            group += Array.fromRange(length).fill(row).join("");
+            
+            if ( util === "add" ) return group + foot;
+            else if ( util === "empty" ) return group;
+        }
+
+        if ( util === "dataGet" ) {
+            let flags = this.object.getFlag("rollgroups", "config.groups");
+            if ( !flags?.length ) return false;
+
+            const groups = flags.map(({ label, parts }) => {
+                const head = `<div class="group-header"><input type="text" value="${label}" placeholder="${placeholder}"></div>`;
+                const rows = Array.fromRange(length).reduce((acc, e) => {
+                    const checked = parts.includes(e) ? "checked" : "";
+                    return acc + `<div class="group-row"><input type="checkbox" ${checked}></div>`;
+                }, "");
+                return head + rows;
+            });
+            return groups;
+        }
+
+        return false;
+    }
 }

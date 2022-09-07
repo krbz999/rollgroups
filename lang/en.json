@@ -3,6 +3,18 @@
         "WARN": {
             "NO_FORMULAS": "The roll group contains no formulas.",
             "NO_ACTOR": "The owner of this item no longer exists."
+        },
+        "CONFIG": {
+            "FORMULA": "Formula",
+            "SAVE": "Save",
+            "DAMAGE": "Damage",
+            "PLACEHOLDER": "Group name"
+        },
+        "SETTINGS": {
+            "...": {
+                "NAME": "...",
+                "HINT": "..."
+            }
         }
     }
 }

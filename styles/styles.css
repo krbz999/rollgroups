@@ -1,38 +1,61 @@
-.rollgroups .inputs.flexrow > div { min-width: 100px; }
 .rollgroups :is(.damage-header, .group-header, .add-header, .group-delete) {
     text-align: center;
     background-color: darkgray;
-    min-height: 30px;
-    max-height: 30px;
     display: grid;
     align-items: center;
 }
-form.rollgroups .inputs.flexrow div.flexcol:last-child {
+.rollgroups :is(.damage-footer, .group-delete, .damage-header, .group-header, .add-header, .damage-row, .group-row) {
+    min-height: 30px;
+    max-height: 30px;
+}
+.rollgroups .damage-header {
+    border-radius: 10px 0 0 10px;
+}
+.rollgroups .add-header {
+    border-radius: 0 10px 10px 0;
+}
+.rollgroups .group-header input {
+    border-radius: 15px;
+    background-color: lightgray;
+}
+.rollgroups .group-header input::placeholder {
+    color: dimgray;
+    font-style: italic;
+}
+.rollgroups .group-header input:focus {
+    box-shadow: none;
+}
+.rollgroups .inputs.flexrow div.flexcol:last-child {
     min-width: 30px;
     max-width: 30px;
 }
-.rollgroups div.group-row {
-    text-align: center;
-    min-height: 28px;
+.rollgroups .inputs.flexrow div.flexcol {
+    min-width: 100px;
+    max-width: 100px;
+}
+.rollgroups .inputs.flexrow div:first-child {
+    overflow: hidden;
+    white-space: nowrap;
+}
+.rollgroups .group-row {
+    display: grid;
+    justify-content: center;
+    align-content: center;
 }
 .rollgroups .damage-row {
     display: grid;
     align-items: center;
-    font-size: 14px;
     font-style: italic;
-    max-height: 28px;
-    min-height: 28px;
+    padding-left: 10px;
 }
-.rollgroups .inputs.flexrow > div:not(:last-child) {
-    min-width: 100px;
-    max-width: 100px;
+.rollgroups .group-delete {
+    background-color: inherit;
 }
-.rollgroups .inputs.flexrow > div:first-child {
-    overflow: hidden;
-    white-space: nowrap;
-}
-.rollgroups div.group-delete { background-color: inherit; }
-.rollgroups .damage-footer, .rollgroups div.group-delete {
+.rollgroups .damage-footer,
+.rollgroups div.group-delete {
     border-top: 1px gray groove;
-    margin-top: 6px;
+    margin: 6px 0 10px 0;
+}
+.rollgroups .add-button {
+    font-size: 20px;
 }
