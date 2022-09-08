@@ -7,8 +7,9 @@ export function createConfigButton(item, html){
     const damageHeader = html[0].querySelector("h4.damage-header");
     if ( !damageHeader ) return;
     const editButton = document.createElement("A");
-    editButton.classList.add("formula-group-config");
-    editButton.innerHTML = '<i class="fas fa-edit"></i>';
+    const locale = game.i18n.localize("ROLLGROUPS.CONFIG.BUTTON");
+    editButton.classList.add("rollgroups", "config-button");
+    editButton.innerHTML = `${locale} <i class='fas fa-edit'></i>`;
     damageHeader.firstChild.after(editButton);
 
     // create listener.

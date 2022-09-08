@@ -6,13 +6,13 @@ This module lets you configure multiple damage buttons for each item on an actor
 On any item with at least two damage parts containing a formula, there is a configuration button next to the 'Damage Formula' header.
 
 <p align="center">
-    <img src="https://i.imgur.com/l8nvcTk.png">
+    <img src="https://i.imgur.com/nurikBk.png">
 </p>
 
 Clicking this button opens the configuration menu. Create as many groups as you like, and give each a name. Tick any damage parts that should be included in the roll.
 
 <p align="center">
-    <img src="https://i.imgur.com/K1O67Uz.png">
+    <img src="https://i.imgur.com/a8u6Wfw.png">
 </p>
 
 When using the item, the normal damage button is replaced with one button for each group. Configuring damage groups on an item will not affect any other attributes of the item. Specifically, the 'Versatile Damage' and 'Other Formula' fields will still be available and function identically to core system behavior.

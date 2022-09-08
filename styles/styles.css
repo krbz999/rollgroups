@@ -33,6 +33,9 @@
     min-width: 100px;
     max-width: 100px;
 }
+.rollgroups .inputs.flexrow div.flexcol[name="rollgroup-formulas"] {
+    min-width: 125px;
+}
 .rollgroups .inputs.flexrow div:first-child {
     overflow: hidden;
     white-space: nowrap;
@@ -47,6 +50,7 @@
     align-items: center;
     font-style: italic;
     padding-left: 10px;
+    font-size: 13px;
 }
 .rollgroups .group-delete {
     background-color: inherit;
@@ -58,4 +62,15 @@
 }
 .rollgroups .add-button {
     font-size: 20px;
+}
+
+/* CONFIG BUTTON */
+h4.damage-header a.rollgroups.config-button {
+    font-size: 12px;
+    border: 2px groove #eeede0;
+    background: rgba(0, 0, 0, 0.1);
+    padding: 2px 10px 2px 5px;
+    min-width: fit-content;
+    border-radius: 0 20px 20px 0;
+    margin-left: 5px;
 }
