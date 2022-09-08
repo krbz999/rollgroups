@@ -30,8 +30,10 @@ export class GroupConfig extends FormApplication {
     async getData(){
         const data = await super.getData();
         
-        const {damageTypes, healingTypes} = CONFIG.DND5E
-        const types = foundry.utils.mergeObject(damageTypes, healingTypes);
+        const types = foundry.utils.mergeObject(
+            foundry.utils.duplicate(CONFIG.DND5E.damageTypes),
+            foundry.utils.duplicate(CONFIG.DND5E.healingTypes)
+        );
         
         // construct the left column of formulas.
         data.parts = this.parts.reduce((acc, [formula, type]) => {

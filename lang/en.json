@@ -11,12 +11,6 @@
             "DAMAGE": "Damage",
             "PLACEHOLDER": "Group name"
         },
-        "SETTINGS": {
-            "...": {
-                "NAME": "...",
-                "HINT": "..."
-            }
-        },
         "LABELS": {
             "DAMAGE": "Damage",
             "HEALING": "Healing",
