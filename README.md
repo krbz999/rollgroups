@@ -5,19 +5,19 @@ This module lets you configure multiple damage buttons for each item on an actor
 ## How to use
 On any item with at least two well-defined damage parts, there is a configuration button next to the formulas. Clicking this button opens the configuration menu.
 
-<p style="text-align: center;">
+<p align="center">
     <img src="https://i.imgur.com/l8nvcTk.png">
 </p>
 
 Create as many groups as you like, and give each a name. Tick off any parts that should be included in the roll.
 
-<p style="text-align: center;">
+<p align="center">
     <img src="https://i.imgur.com/K1O67Uz.png">
 </p>
 
 When using the item, the normal damage button is replaced with a button for each of the groups. Configuring damage groupos will not any other attributes of the item. Specifically, the Versatile and Other fields will still be available.
 
-<p style="text-align: center;">
+<p align="center">
     <img src="https://i.imgur.com/cW0o2ie.png">
 </p>
 
