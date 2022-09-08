@@ -3,13 +3,13 @@
 This module lets you configure multiple damage buttons for each item on an actor. For the formulas ('damage parts') in the item, you can group them in as many different combinations as you would like.
 
 ## How to use
-On any item with at least two damage parts containing a formula, there is a configuration button next to the 'Damage Formula' header. Clicking this button opens the configuration menu.
+On any item with at least two damage parts containing a formula, there is a configuration button next to the 'Damage Formula' header.
 
 <p align="center">
     <img src="https://i.imgur.com/l8nvcTk.png">
 </p>
 
-Create as many groups as you like, and give each a name. Tick any damage parts that should be included in the roll.
+Clicking this button opens the configuration menu. Create as many groups as you like, and give each a name. Tick any damage parts that should be included in the roll.
 
 <p align="center">
     <img src="https://i.imgur.com/K1O67Uz.png">
@@ -62,3 +62,8 @@ const updates = game.items.filter(i => {
 const updated = await Item.updateDocuments(updates, {pack: undefined});
 console.log(`ROLLGROUPS: Successfully mgirated ${updated.length} items.`);
 ```
+
+### Complementary Modules
+These modules have all been confirmed to work without issues and complement Roll Groups.
+- Build-a-Bonus, for applying niche bonuses in situational circumstances.
+- Effective Transferral, for applying effects through item usage and the chatlog.
