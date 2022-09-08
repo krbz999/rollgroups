@@ -2,7 +2,8 @@
     "ROLLGROUPS": {
         "WARN": {
             "NO_FORMULAS": "The roll group contains no formulas.",
-            "NO_ACTOR": "The owner of this item no longer exists."
+            "NO_ACTOR": "The owner of this item no longer exists.",
+            "NO_GROUPS": "This item has no roll groups."
         },
         "CONFIG": {
             "FORMULA": "Formula",
@@ -15,6 +16,11 @@
                 "NAME": "...",
                 "HINT": "..."
             }
+        },
+        "LABELS": {
+            "DAMAGE": "Damage",
+            "HEALING": "Healing",
+            "MIXED": "Mixed"
         }
     }
 }

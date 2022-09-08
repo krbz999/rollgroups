@@ -30,9 +30,13 @@ export class GroupConfig extends FormApplication {
     async getData(){
         const data = await super.getData();
         
+        const {damageTypes, healingTypes} = CONFIG.DND5E
+        const types = foundry.utils.mergeObject(damageTypes, healingTypes);
+        
         // construct the left column of formulas.
         data.parts = this.parts.reduce((acc, [formula, type]) => {
-            const locale = CONFIG.DND5E.damageTypes[type];
+            let locale = types[type];
+            if ( !locale ) locale = game.i18n.localize("None");
             const text = `${formula} (${locale})`;
             return acc + `<div class="damage-row" title="${text}">${text}</div>`;
         }, "");
