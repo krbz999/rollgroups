@@ -71,6 +71,11 @@ h4.damage-header a.rollgroups.config-button {
     background: rgba(0, 0, 0, 0.1);
     padding: 2px 10px 2px 5px;
     min-width: fit-content;
-    border-radius: 0 20px 20px 0;
+    border-radius: 7px;
     margin-left: 5px;
+    color: black;
+}
+h4.damage-header a.rollgroups.config-button.disabled {
+    pointer-events: none;
+    color: gray;
 }

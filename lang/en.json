@@ -10,7 +10,8 @@
             "SAVE": "Save",
             "DAMAGE": "Damage",
             "PLACEHOLDER": "Group name",
-            "BUTTON": "Group Config"
+            "BUTTON": "Group Config",
+            "TITLE": "Open the Roll Group configuration menu"
         },
         "LABELS": {
             "DAMAGE": "Damage",

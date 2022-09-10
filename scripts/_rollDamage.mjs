@@ -1,3 +1,5 @@
+import { MODULE } from "./_constants.mjs";
+
 export function createChatLogListeners(html){
     html[0].addEventListener("click", (event) => {
         
@@ -18,7 +20,7 @@ export function createChatLogListeners(html){
 }
 
 export async function rollDamageGroup({rollgroup=0, critical=false, event=null, spellLevel=null, versatile=false, options={}} = {}){
-    const group = this.getFlag("rollgroups", "config.groups");
+    const group = this.getFlag(MODULE, "config.groups");
     if ( !group?.length ) {
         ui.notifications.error(game.i18n.localize("ROLLGROUPS.WARN.NO_GROUPS"));
         return null;

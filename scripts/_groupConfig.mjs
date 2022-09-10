@@ -1,3 +1,5 @@
+import { MODULE } from "./_constants.mjs";
+
 export class GroupConfig extends FormApplication {
     constructor(item, options){
         super(item, options);
@@ -8,13 +10,13 @@ export class GroupConfig extends FormApplication {
             closeOnSubmit: true,
             width: "max-content",
             height: "auto",
-            template: "/modules/rollgroups/templates/group_config.html",
-            classes: ["rollgroups"]
+            template: `/modules/${MODULE}/templates/group_config.html`,
+            classes: [MODULE]
         });
     }
 
     get id(){
-        return `rollgroups-groupconfig-${this.object.id}`;
+        return `${MODULE}-groupconfig-${this.object.id}`;
     }
 
     get parts(){
@@ -68,7 +70,7 @@ export class GroupConfig extends FormApplication {
             if ( !parts.length ) parts.push(0);
             groups.push({ label, parts });
         }
-        return this.object.setFlag("rollgroups", "config.groups", groups);
+        return this.object.setFlag(MODULE, "config.groups", groups);
 	}
 
 	activateListeners(html){
@@ -76,7 +78,7 @@ export class GroupConfig extends FormApplication {
         html[0].addEventListener("click", (event) => {
             const button = event.target.closest(".trigger");
             const name = button?.getAttribute("name");
-            const form = button?.closest(".app.window-app.rollgroups");
+            const form = button?.closest(`.app.window-app.${MODULE}`);
             
             if ( name === "add" ) {
                 // create new column element.
@@ -110,9 +112,20 @@ export class GroupConfig extends FormApplication {
         const placeholder = game.i18n.localize("ROLLGROUPS.CONFIG.PLACEHOLDER");
 
         if ( ["add", "empty"].includes(util) ) {
-            let group = `<div class="group-header"><input type="text" value="Name" placeholder="${placeholder}"></div>`;
-            const row = `<div class="group-row"><input type="checkbox" checked></div>`;
-            const foot = `<div class="group-delete trigger" name="delete"> <a class="delete-button"> <i class="fas fa-trash"></i> </a> </div>`;
+            let group = `
+            <div class="group-header">
+                <input type="text" value="Name" placeholder="${placeholder}">
+            </div>`;
+            const row = `
+            <div class="group-row">
+                <input type="checkbox" checked>
+            </div>`;
+            const foot = `
+            <div class="group-delete trigger" name="delete">
+                <a class="delete-button">
+                    <i class="fas fa-trash"></i>
+                </a>
+            </div>`;
             group += Array.fromRange(length).fill(row).join("");
             
             if ( util === "add" ) return group + foot;
@@ -120,14 +133,20 @@ export class GroupConfig extends FormApplication {
         }
 
         if ( util === "dataGet" ) {
-            let flags = this.object.getFlag("rollgroups", "config.groups");
+            let flags = this.object.getFlag(MODULE, "config.groups");
             if ( !flags?.length ) return false;
 
             const groups = flags.map(({ label, parts }) => {
-                const head = `<div class="group-header"><input type="text" value="${label}" placeholder="${placeholder}"></div>`;
+                const head = `
+                <div class="group-header">
+                    <input type="text" value="${label}" placeholder="${placeholder}">
+                </div>`;
                 const rows = Array.fromRange(length).reduce((acc, e) => {
                     const checked = parts.includes(e) ? "checked" : "";
-                    return acc + `<div class="group-row"><input type="checkbox" ${checked}></div>`;
+                    return acc + `
+                    <div class="group-row">
+                        <input type="checkbox" ${checked}>
+                    </div>`;
                 }, "");
                 return head + rows;
             });
