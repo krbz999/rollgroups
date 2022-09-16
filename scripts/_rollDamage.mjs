@@ -14,7 +14,7 @@ export function createChatLogListeners(html){
         
         const clone = constructClone(item, parts);
         
-        const {spellLevel} = button.closest(".dnd5e.chat-card.item-card").dataset;
+        const { spellLevel } = button.closest(".dnd5e.chat-card.item-card").dataset;
         return clone.rollDamage({ spellLevel, event });
     });
 }
@@ -53,7 +53,7 @@ function constructPartsFromCard(item, button){
 
 // general method to construct the PARTS for the clone, given an array of integers.
 function constructParts(item, groupParts){
-    const {parts} = item.system.damage;
+    const { parts } = item.system.damage;
     const group = groupParts.reduce((acc, i) => {
         if ( i < parts.length ) acc.push( parts[i] );
         return acc;
@@ -67,8 +67,8 @@ function constructParts(item, groupParts){
 }
 
 function findItem(button){
-    const {itemUuid, actorUuid} = button.dataset;
-    const {messageId} = button.closest(".chat-message.message.flexcol").dataset;
+    const { itemUuid, actorUuid } = button.dataset;
+    const { messageId} = button.closest(".chat-message.message.flexcol").dataset;
     const message = game.messages.get(messageId);
     const itemData = message.getFlag("dnd5e", "itemData");
 

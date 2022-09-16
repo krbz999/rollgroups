@@ -62,7 +62,7 @@ export class GroupConfig extends FormApplication {
         if ( event.type !== "submit" ) return;
         const groupNodes = this.form.querySelectorAll("[name='rollgroup-groups']");
         const groups = [];
-        for ( let group of groupNodes ) {
+        for ( const group of groupNodes ) {
             let label = group.querySelector(".group-header > input").value;
             if ( !label ) label = game.i18n.localize("ROLLGROUPS.CONFIG.DAMAGE");
             const boxes = group.querySelectorAll(".group-row > input");
@@ -71,10 +71,10 @@ export class GroupConfig extends FormApplication {
             groups.push({ label, parts });
         }
         return this.object.setFlag(MODULE, "config.groups", groups);
-	}
+    }
 
-	activateListeners(html){
-		super.activateListeners(html);
+    activateListeners(html){
+        super.activateListeners(html);
         html[0].addEventListener("click", (event) => {
             const button = event.target.closest(".trigger");
             const name = button?.getAttribute("name");
@@ -105,7 +105,7 @@ export class GroupConfig extends FormApplication {
                 this.setPosition();
             }
         });
-	}
+    }
 
     columnHelper(util = "add"){
         const length = this.parts.length;
@@ -133,7 +133,7 @@ export class GroupConfig extends FormApplication {
         }
 
         if ( util === "dataGet" ) {
-            let flags = this.object.getFlag(MODULE, "config.groups");
+            const flags = this.object.getFlag(MODULE, "config.groups");
             if ( !flags?.length ) return false;
 
             const groups = flags.map(({ label, parts }) => {
