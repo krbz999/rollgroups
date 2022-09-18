@@ -22,8 +22,8 @@ export function createChatLogListeners(html){
 export async function rollDamageGroup({rollgroup=0, critical=false, event=null, spellLevel=null, versatile=false, options={}} = {}){
     const group = this.getFlag(MODULE, "config.groups");
     if ( !group?.length ) {
-        ui.notifications.error(game.i18n.localize("ROLLGROUPS.WARN.NO_GROUPS"));
-        return null;
+        //ui.notifications.error(game.i18n.localize("ROLLGROUPS.WARN.NO_GROUPS"));
+        return this.rollDamage({ critical, event, spellLevel, versatile, options });
     }
     const indices = group[rollgroup]?.parts;
     if ( !indices?.length ) {
