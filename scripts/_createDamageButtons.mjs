@@ -1,10 +1,13 @@
+import { MODULE } from "./_constants.mjs";
+
 export function createDamageButtons(item, data){
     const el = document.createElement("DIV");
     el.innerHTML = data.content;
-    const damageButton = el.querySelector(".card-buttons button[data-action='damage']");
+    const select = ".card-buttons button[data-action='damage']";
+    const damageButton = el.querySelector(select);
     if ( !damageButton ) return;
 
-    const groups = item.getFlag("rollgroups", "config.groups");
+    const groups = item.getFlag(MODULE, "config.groups");
     const validParts = item.system.damage?.parts.filter(([f]) => !!f);
     if ( !groups?.length || validParts.length < 2 ) return;
     
@@ -14,7 +17,7 @@ export function createDamageButtons(item, data){
     const mixedLabel = game.i18n.localize("ROLLGROUPS.LABELS.MIXED");
     
     // the button html.
-    const group = groups.reduce((acc, {label, parts}) => {
+    const group = groups.reduce((acc, { label, parts }) => {
         const r = "rollgroup-damage";
         const p = parts.join(";");
         const u = item.uuid;
@@ -25,7 +28,9 @@ export function createDamageButtons(item, data){
         const lab = isDamage ? damageLabel : isHealing ? healingLabel : mixedLabel;
         const l = `${lab} (${label})`;
         return acc + `
-        <button data-action="${r}" data-group-parts="${p}" data-item-uuid="${u}" data-actor-uuid="${a}">${l}</button>`;
+        <button data-action="${r}" data-group-parts="${p}" data-item-uuid="${u}" data-actor-uuid="${a}">
+            ${l}
+        </button>`;
     }, "");
 
     const dmg = document.createElement("DIV");

@@ -1,3 +1,5 @@
+import { MODULE } from "./_constants.mjs";
+
 export function createChatLogListeners(html){
     html[0].addEventListener("click", (event) => {
         
@@ -12,16 +14,16 @@ export function createChatLogListeners(html){
         
         const clone = constructClone(item, parts);
         
-        const {spellLevel} = button.closest(".dnd5e.chat-card.item-card").dataset;
+        const { spellLevel } = button.closest(".dnd5e.chat-card.item-card").dataset;
         return clone.rollDamage({ spellLevel, event });
     });
 }
 
 export async function rollDamageGroup({rollgroup=0, critical=false, event=null, spellLevel=null, versatile=false, options={}} = {}){
-    const group = this.getFlag("rollgroups", "config.groups");
+    const group = this.getFlag(MODULE, "config.groups");
     if ( !group?.length ) {
-        ui.notifications.error(game.i18n.localize("ROLLGROUPS.WARN.NO_GROUPS"));
-        return null;
+        //ui.notifications.error(game.i18n.localize("ROLLGROUPS.WARN.NO_GROUPS"));
+        return this.rollDamage({ critical, event, spellLevel, versatile, options });
     }
     const indices = group[rollgroup]?.parts;
     if ( !indices?.length ) {
@@ -51,7 +53,7 @@ function constructPartsFromCard(item, button){
 
 // general method to construct the PARTS for the clone, given an array of integers.
 function constructParts(item, groupParts){
-    const {parts} = item.system.damage;
+    const { parts } = item.system.damage;
     const group = groupParts.reduce((acc, i) => {
         if ( i < parts.length ) acc.push( parts[i] );
         return acc;
@@ -65,8 +67,8 @@ function constructParts(item, groupParts){
 }
 
 function findItem(button){
-    const {itemUuid, actorUuid} = button.dataset;
-    const {messageId} = button.closest(".chat-message.message.flexcol").dataset;
+    const { itemUuid, actorUuid } = button.dataset;
+    const { messageId} = button.closest(".chat-message.message.flexcol").dataset;
     const message = game.messages.get(messageId);
     const itemData = message.getFlag("dnd5e", "itemData");
 

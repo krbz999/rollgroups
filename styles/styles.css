@@ -5,14 +5,24 @@
     align-items: center;
 }
 .rollgroups :is(.damage-footer, .group-delete, .damage-header, .group-header, .add-header, .damage-row, .group-row) {
-    min-height: 30px;
-    max-height: 30px;
+    min-height: 35px;
+    max-height: 35px;
+}
+.rollgroups :is(.damage-header, .group-header, .add-header) {
+    border-color: lightgray;
+    border-top: groove;
+    border-bottom: groove;
+}
+.rollgroups .group-header {
+    border-radius: 1px;
 }
 .rollgroups .damage-header {
     border-radius: 10px 0 0 10px;
+    border-left: groove;
 }
 .rollgroups .add-header {
     border-radius: 0 10px 10px 0;
+    border-right: groove;
 }
 .rollgroups .group-header input {
     border-radius: 15px;
@@ -45,6 +55,9 @@
     justify-content: center;
     align-content: center;
 }
+.rollgroups .group-row input[type="checkbox"]:focus {
+    outline: auto;
+}
 .rollgroups .damage-row {
     display: grid;
     align-items: center;
@@ -71,6 +84,11 @@ h4.damage-header a.rollgroups.config-button {
     background: rgba(0, 0, 0, 0.1);
     padding: 2px 10px 2px 5px;
     min-width: fit-content;
-    border-radius: 0 20px 20px 0;
+    border-radius: 7px;
     margin-left: 5px;
+    color: black;
+}
+h4.damage-header a.rollgroups.config-button.disabled {
+    pointer-events: none;
+    color: gray;
 }
