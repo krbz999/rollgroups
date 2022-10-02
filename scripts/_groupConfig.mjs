@@ -67,7 +67,7 @@ export class GroupConfig extends FormApplication {
       if (!label) label = game.i18n.localize("ROLLGROUPS.CONFIG.DAMAGE");
       const boxes = group.querySelectorAll(".group-row > input");
       const parts = Array.fromRange(boxes.length).filter(i => boxes[i].checked);
-      if (!parts.length) parts.push(0);
+      if (!parts.length) continue;
       groups.push({ label, parts });
     }
     return this.object.setFlag(MODULE, "config.groups", groups);
