@@ -1,94 +1,120 @@
 .rollgroups :is(.damage-header, .group-header, .add-header, .group-delete) {
-    text-align: center;
-    background-color: darkgray;
-    display: grid;
-    align-items: center;
+  text-align: center;
+  background-color: darkgray;
+  display: grid;
+  align-items: center;
 }
+
 .rollgroups :is(.damage-footer, .group-delete, .damage-header, .group-header, .add-header, .damage-row, .group-row) {
-    min-height: 35px;
-    max-height: 35px;
+  min-height: 35px;
+  max-height: 35px;
 }
+
 .rollgroups :is(.damage-header, .group-header, .add-header) {
-    border-color: lightgray;
-    border-top: groove;
-    border-bottom: groove;
+  border-color: lightgray;
+  border-top: groove;
+  border-bottom: groove;
 }
+
 .rollgroups .group-header {
-    border-radius: 1px;
+  border-radius: 1px;
+  padding: 2px 4px;
 }
+
 .rollgroups .damage-header {
-    border-radius: 10px 0 0 10px;
-    border-left: groove;
+  border-radius: 10px 0 0 10px;
+  border-left: groove;
+  font-weight: bold;
 }
+
 .rollgroups .add-header {
-    border-radius: 0 10px 10px 0;
-    border-right: groove;
+  border-radius: 0 10px 10px 0;
+  border-right: groove;
 }
+
 .rollgroups .group-header input {
-    border-radius: 15px;
-    background-color: lightgray;
+  border-radius: 8px;
+  background-color: lightgray;
 }
+
 .rollgroups .group-header input::placeholder {
-    color: dimgray;
-    font-style: italic;
+  color: dimgray;
+  font-style: italic;
 }
+
 .rollgroups .group-header input:focus {
-    box-shadow: none;
+  box-shadow: none;
 }
+
 .rollgroups .inputs.flexrow div.flexcol:last-child {
-    min-width: 30px;
-    max-width: 30px;
+  min-width: 30px;
+  max-width: 30px;
 }
+
 .rollgroups .inputs.flexrow div.flexcol {
-    min-width: 100px;
-    max-width: 100px;
+  min-width: 100px;
+  max-width: 100px;
 }
+
 .rollgroups .inputs.flexrow div.flexcol[name="rollgroup-formulas"] {
-    min-width: 125px;
+  min-width: 125px;
 }
+
 .rollgroups .inputs.flexrow div:first-child {
-    overflow: hidden;
-    white-space: nowrap;
+  overflow: hidden;
+  white-space: nowrap;
 }
+
 .rollgroups .group-row {
-    display: grid;
-    justify-content: center;
-    align-content: center;
+  display: grid;
+  justify-content: center;
+  align-content: center;
 }
+
 .rollgroups .group-row input[type="checkbox"]:focus {
-    outline: auto;
+  outline: auto;
 }
+
 .rollgroups .damage-row {
-    display: grid;
-    align-items: center;
-    font-style: italic;
-    padding-left: 10px;
-    font-size: 13px;
+  display: grid;
+  align-items: center;
+  font-style: italic;
+  padding-left: 10px;
+  font-size: 13px;
 }
+
 .rollgroups .group-delete {
-    background-color: inherit;
+  background-color: inherit;
 }
+
+.rollgroups .group-delete a {
+  max-width: fit-content;
+  place-self: center;
+}
+
 .rollgroups .damage-footer,
 .rollgroups div.group-delete {
-    border-top: 1px gray groove;
-    margin: 6px 0 10px 0;
+  border-top: 1px gray groove;
+  margin: 6px 0 10px 0;
 }
+
 .rollgroups .add-button {
-    font-size: 20px;
+  font-size: 20px;
 }
 
 /* CONFIG BUTTON */
 h4.damage-header a.rollgroups.config-button {
-    font-size: 12px;
-    border: 2px groove #eeede0;
-    background: rgba(0, 0, 0, 0.1);
-    padding: 2px 10px 2px 5px;
-    min-width: fit-content;
-    border-radius: 7px;
-    margin-left: 5px;
-    color: black;
+  font-size: 12px;
+  border: 2px groove #eeede0;
+  background: rgba(0, 0, 0, 0.1);
+  padding: 2px 10px 2px 5px;
+  min-width: fit-content;
+  border-radius: 4px;
+  margin-left: 5px;
+  color: black;
 }
+
 h4.damage-header a.rollgroups.config-button.disabled {
-    pointer-events: none;
-    color: gray;
+  pointer-events: none;
+  color: gray;
 }

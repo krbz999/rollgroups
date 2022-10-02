@@ -1,29 +1,29 @@
 <form class="rollgroups">
-    <div class="inputs flexrow">
-        <div class="flexcol" name="rollgroup-formulas">
-            <div class="damage-header">{{localize "ROLLGROUPS.CONFIG.FORMULA"}}</div>
-            {{{parts}}}
-            <div class="damage-footer"></div>
-        </div>
-        {{#each groups as |group|}}
-        <div class="flexcol" name="rollgroup-groups">
-            {{{group}}}
-            <div class="group-delete trigger" name="delete">
-                <a class="delete-button">
-                    <i class="fas fa-trash"></i>
-                </a>
-            </div>
-        </div>
-        {{/each}}
-        <div class="flexcol">
-            <div class="add-header trigger" name="add">
-                <a class="add-button">
-                    <i class="fas fa-plus"></i>
-                </a>
-            </div>
-        </div>
+  <div class="inputs flexrow">
+    <div class="flexcol" name="rollgroup-formulas">
+      <div class="damage-header">{{localize "ROLLGROUPS.CONFIG.FORMULA"}}</div>
+      {{{parts}}}
+      <div class="damage-footer"></div>
     </div>
-    <div class="footer">
-        <button name="submit"><i class="fas fa-save"></i> {{localize "ROLLGROUPS.CONFIG.SAVE"}}</button>
+    {{#each groups as |group|}}
+    <div class="flexcol" name="rollgroup-groups">
+      {{{group}}}
+      <div class="group-delete trigger" name="delete">
+        <a class="delete-button">
+          <i class="fas fa-trash"></i>
+        </a>
+      </div>
     </div>
+    {{/each}}
+    <div class="flexcol">
+      <div class="add-header trigger" name="add">
+        <a class="add-button">
+          <i class="fas fa-plus"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="footer">
+    <button name="submit"><i class="fas fa-save"></i> {{localize "ROLLGROUPS.CONFIG.SAVE"}}</button>
+  </div>
 </form>

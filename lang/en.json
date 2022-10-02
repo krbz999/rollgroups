@@ -1,22 +1,23 @@
 {
-    "ROLLGROUPS": {
-        "WARN": {
-            "NO_FORMULAS": "The roll group contains no formulas.",
-            "NO_ACTOR": "The owner of this item no longer exists.",
-            "NO_GROUPS": "This item has no roll groups."
-        },
-        "CONFIG": {
-            "FORMULA": "Formula",
-            "SAVE": "Save",
-            "DAMAGE": "Damage",
-            "PLACEHOLDER": "Group name",
-            "BUTTON": "Group Config",
-            "TITLE": "Open the Roll Group configuration menu"
-        },
-        "LABELS": {
-            "DAMAGE": "Damage",
-            "HEALING": "Healing",
-            "MIXED": "Mixed"
-        }
+  "ROLLGROUPS": {
+    "WARN": {
+      "NO_FORMULAS": "The roll group contains no formulas.",
+      "NO_ACTOR": "The owner of this item no longer exists.",
+      "NO_GROUPS": "This item has no roll groups."
+    },
+    "CONFIG": {
+      "FORMULA": "Formula",
+      "SAVE": "Save",
+      "DAMAGE": "Damage",
+      "PLACEHOLDER": "Group name",
+      "BUTTON": "Group Config",
+      "TITLE": "Open the Roll Group configuration menu",
+      "GROUP_CONFIG": "Group Config: {name}"
+    },
+    "LABELS": {
+      "DAMAGE": "Damage",
+      "HEALING": "Healing",
+      "MIXED": "Mixed"
     }
+  }
 }
