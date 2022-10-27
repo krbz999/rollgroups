@@ -85,7 +85,7 @@ function findItem(button) {
   return item;
 }
 
-/*  
+/*
   Adjustments to 'damage' roll labels.
   Pure healing rolls show "Healing",
   Pure temphp rolls show "Healing (Temp)",
@@ -105,10 +105,8 @@ export function variantDamageLabels(item, config) {
   let flavor = title;
   if (isTemp) {
     flavor = `${title} (${game.i18n.localize("DND5E.Temp")})`;
-  }
-  else if (item.labels.damageTypes.length) {
+  } else if (item.labels.damageTypes.length) {
     flavor = `${title} (${item.labels.damageTypes})`;
   }
-
   foundry.utils.mergeObject(config, { title, flavor });
 }
