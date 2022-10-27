@@ -1,0 +1,23 @@
+{
+  "ROLLGROUPS": {
+    "WARN": {
+      "NO_FORMULAS": "Die Würfelgruppe enthält keine Formeln.",
+      "NO_ACTOR": "Der Besitzer dieses Items existiert nicht mehr.",
+      "NO_GROUPS": "Dieses Item hat keine Würfelgruppen."
+    },
+    "CONFIG": {
+      "FORMULA": "Formel",
+      "SAVE": "Speichern",
+      "DAMAGE": "Schaden",
+      "PLACEHOLDER": "Gruppenname",
+      "BUTTON": "Gruppenkonfiguration",
+      "TITLE": "Öffnet Würfelgruppen-Konfiguration",
+      "GROUP_CONFIG": "Würfelgruppe: {name}"
+    },
+    "LABELS": {
+      "DAMAGE": "Schaden",
+      "HEALING": "Heilung",
+      "MIXED": "Gemischt"
+    }
+  }
+}
