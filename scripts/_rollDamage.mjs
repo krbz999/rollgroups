@@ -14,7 +14,7 @@ export function createChatLogListeners(html) {
 
     const clone = constructClone(item, parts);
 
-    const { spellLevel } = button.closest(".dnd5e.chat-card.item-card").dataset;
+    const { spellLevel } = button.closest(`.${game.system.id}.chat-card.item-card`).dataset;
     return clone.rollDamage({ spellLevel, event });
   });
 }
@@ -69,7 +69,7 @@ function findItem(button) {
   const { itemUuid, actorUuid } = button.dataset;
   const { messageId } = button.closest(".chat-message.message.flexcol").dataset;
   const message = game.messages.get(messageId);
-  const itemData = message.getFlag("dnd5e", "itemData");
+  const itemData = message.getFlag(game.system.id, "itemData");
 
   let item;
   if (!itemData) {
@@ -97,14 +97,14 @@ export function variantDamageLabels(item, config) {
   }));
   const isTemp = labels.size === 1 && labels.first() === "temphp";
   const string = labels.every(t => {
-    return t in CONFIG.DND5E.healingTypes;
-  }) ? "DND5E.Healing" : "DND5E.DamageRoll";
+    return t in CONFIG[game.system.id.toUpperCase()].healingTypes;
+  }) ? `${game.system.id.toUpperCase()}.Healing` : `${game.system.id.toUpperCase()}.DamageRoll`;
   const actionFlavor = game.i18n.localize(string);
   const title = `${item.name} - ${actionFlavor}`;
 
   let flavor = title;
   if (isTemp) {
-    flavor = `${title} (${game.i18n.localize("DND5E.Temp")})`;
+    flavor = `${title} (${game.i18n.localize(`${game.system.id.toUpperCase()}.Temp`)})`;
   } else if (item.labels.damageTypes.length) {
     flavor = `${title} (${item.labels.damageTypes})`;
   }
