@@ -33,8 +33,8 @@ export class GroupConfig extends FormApplication {
     const data = await super.getData();
 
     const types = foundry.utils.mergeObject(
-      foundry.utils.duplicate(CONFIG.DND5E.damageTypes),
-      foundry.utils.duplicate(CONFIG.DND5E.healingTypes)
+      foundry.utils.duplicate(CONFIG[game.system.id.toUpperCase()].damageTypes),
+      foundry.utils.duplicate(CONFIG[game.system.id.toUpperCase()].healingTypes)
     );
 
     // construct the left column of formulas.

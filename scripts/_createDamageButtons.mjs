@@ -23,8 +23,8 @@ export function createDamageButtons(item, data) {
     const u = item.uuid;
     const a = item.parent.uuid;
     const types = parts.map(t => validParts[t][1]);
-    const isDamage = types.every(t => t in CONFIG.DND5E.damageTypes);
-    const isHealing = types.every(t => t in CONFIG.DND5E.healingTypes);
+    const isDamage = types.every(t => t in CONFIG[game.system.id.toUpperCase()].damageTypes);
+    const isHealing = types.every(t => t in CONFIG[game.system.id.toUpperCase()].healingTypes);
     const lab = isDamage ? damageLabel : isHealing ? healingLabel : mixedLabel;
     const l = `${lab} (${label})`;
     return acc + `

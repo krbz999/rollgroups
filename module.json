@@ -31,6 +31,15 @@
           "minimum": "2.0.0",
           "verified": "2.0.3"
         }
+      },
+      {
+        "id": "sw5e",
+        "type": "system",
+        "manifest": "https://raw.githubusercontent.com/unrealkakeman89/sw5e/master/system.json",
+        "compatibility": {
+          "minimum": "2.0.0",
+          "verified": "2.0.3"
+        }
       }
     ]
   },
