@@ -1,6 +1,6 @@
 import { MODULE } from "./_constants.mjs";
 
-export function createChatLogListeners(html) {
+export function createChatLogListeners(_, html) {
   html[0].addEventListener("click", (event) => {
 
     const button = event.target.closest("button[data-action='rollgroup-damage']");

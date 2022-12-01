@@ -113,8 +113,3 @@ h4.damage-header a.rollgroups.config-button {
   margin-left: 5px;
   color: black;
 }
-
-h4.damage-header a.rollgroups.config-button.disabled {
-  pointer-events: none;
-  color: gray;
-}

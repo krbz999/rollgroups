@@ -27,10 +27,7 @@ export function createDamageButtons(item, data) {
     const isHealing = types.every(t => t in CONFIG[game.system.id.toUpperCase()].healingTypes);
     const lab = isDamage ? damageLabel : isHealing ? healingLabel : mixedLabel;
     const l = `${lab} (${label})`;
-    return acc + `
-        <button data-action="${r}" data-group-parts="${p}" data-item-uuid="${u}" data-actor-uuid="${a}">
-            ${l}
-        </button>`;
+    return acc + `<button data-action="${r}" data-group-parts="${p}" data-item-uuid="${u}" data-actor-uuid="${a}">${l}</button>`;
   }, "");
 
   const dmg = document.createElement("DIV");

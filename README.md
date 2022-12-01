@@ -31,19 +31,19 @@ No special consideration needs to be kept in mind for spells. It works exactly a
 If you were using Minimal Rolling Enhancements in v9 and wish to migrate all actors in the world to using Roll Groups, this provided script will copy the roll group data of all the actors' items to the new format.
 
 ```js
-for ( const a of game.actors ) {
-    console.log(`ROLLGROUPS: Migrating ${a.name}'s items.`);
-    const items = a.items.filter(i => {
-        return i.flags["mre-dnd5e"]?.formulaGroups?.length > 1;
-    });
-    const updates = items.map(i => {
-        let string = JSON.stringify(i.flags["mre-dnd5e"].formulaGroups);
-        string = string.replaceAll("formulaSet", "parts");
-        const object = JSON.parse(string);
-        return {_id: i.id, "flags.rollgroups.config.groups": object};
-    });
-    await a.updateEmbeddedDocuments("Item", updates);
-    console.log(`ROLLGROUPS: Successfully migrated ${a.name}'s items.`);
+for (const a of game.actors) {
+  console.log(`ROLLGROUPS: Migrating ${a.name}'s items.`);
+  const items = a.items.filter(i => {
+    return i.flags["mre-dnd5e"]?.formulaGroups?.length > 1;
+  });
+  const updates = items.map(i => {
+    let string = JSON.stringify(i.flags["mre-dnd5e"].formulaGroups);
+    string = string.replaceAll("formulaSet", "parts");
+    const object = JSON.parse(string);
+    return {_id: i.id, "flags.rollgroups.config.groups": object};
+  });
+  await a.updateEmbeddedDocuments("Item", updates);
+  console.log(`ROLLGROUPS: Successfully migrated ${a.name}'s items.`);
 }
 ```
 
@@ -52,15 +52,15 @@ Similarly this script migrates all items in the item directory. If you replace t
 ```js
 console.log(`ROLLGROUPS: Migrating all items.`);
 const updates = game.items.filter(i => {
-    return i.flags["mre-dnd5e"]?.formulaGroups?.length > 1;
+  return i.flags["mre-dnd5e"]?.formulaGroups?.length > 1;
 }).map(i => {
-    let string = JSON.stringify(i.flags["mre-dnd5e"].formulaGroups);
-    string = string.replaceAll("formulaSet", "parts");
-    const object = JSON.parse(string);
-    return {_id: i.id, "flags.rollgroups.config.groups": object};
+  let string = JSON.stringify(i.flags["mre-dnd5e"].formulaGroups);
+  string = string.replaceAll("formulaSet", "parts");
+  const object = JSON.parse(string);
+  return {_id: i.id, "flags.rollgroups.config.groups": object};
 });
 const updated = await Item.updateDocuments(updates, {pack: undefined});
-console.log(`ROLLGROUPS: Successfully mgirated ${updated.length} items.`);
+console.log(`ROLLGROUPS: Successfully migrated ${updated.length} items.`);
 ```
 
 ### Complementary Modules

@@ -10,7 +10,7 @@ export class GroupConfig extends FormApplication {
       closeOnSubmit: true,
       width: "max-content",
       height: "auto",
-      template: `/modules/${MODULE}/templates/group_config.html`,
+      template: `modules/${MODULE}/templates/group_config.hbs`,
       classes: [MODULE]
     });
   }
@@ -20,9 +20,7 @@ export class GroupConfig extends FormApplication {
   }
 
   get parts() {
-    return this.object.system.damage.parts.filter(([formula]) => {
-      return !!formula;
-    });
+    return this.object.system.damage.parts.filter(([f]) => !!f);
   }
 
   get groups() {
@@ -48,9 +46,8 @@ export class GroupConfig extends FormApplication {
     // construct the group columns.
     if (this.groups) {
       data.groups = this.groups;
-    }
-    else {
-      // if no groups, then create a single group with all formulas checked.
+    } else {
+      // if no groups, then create a single group with all formulas unchecked.
       const group = this.columnHelper("empty");
       data.groups = [group];
     }
@@ -116,14 +113,11 @@ export class GroupConfig extends FormApplication {
       <div class="group-header">
         <input type="text" value="Name" placeholder="${placeholder}">
       </div>`;
-      const row = `
-      <div class="group-row">
-        <input type="checkbox">
-      </div>`;
+      const row = `<div class="group-row"><input type="checkbox"></div>`;
       const foot = `
       <div class="group-delete trigger" name="delete">
         <a class="delete-button">
-          <i class="fas fa-trash"></i>
+          <i class="fa-solid fa-trash"></i>
         </a>
       </div>`;
       group += Array.fromRange(length).fill(row).join("");
@@ -143,10 +137,7 @@ export class GroupConfig extends FormApplication {
         </div>`;
         const rows = Array.fromRange(length).reduce((acc, e) => {
           const checked = parts.includes(e) ? "checked" : "";
-          return acc + `
-          <div class="group-row">
-            <input type="checkbox" ${checked}>
-          </div>`;
+          return acc + `<div class="group-row"><input type="checkbox" ${checked}></div>`;
         }, "");
         return head + rows;
       });
