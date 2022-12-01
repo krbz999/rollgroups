@@ -1,9 +1,9 @@
 # Roll Groups
 
-This module lets you configure multiple damage buttons for each item on an actor. For the formulas ('damage parts') in the item, you can group them in as many different combinations as you would like.
+This module (for dnd5e and sw5e) lets you configure multiple damage buttons for each item on an actor. For the formulas ('damage parts') in the item, you can group them in as many different combinations as you would like.
 
 ## How to use
-On any item with at least two damage parts containing a formula, there is a configuration button next to the 'Damage Formula' header.
+On any item containing a damage formula, there is a configuration button next to the 'Damage Formula' header.
 
 <p align="center">
     <img src="https://i.imgur.com/nurikBk.png">
