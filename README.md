@@ -68,3 +68,5 @@ These modules have all been confirmed to work without issues and complement Roll
 - [Build-a-Bonus](https://foundryvtt.com/packages/babonus), for applying niche bonuses in situational circumstances.
 - [Effective Transferral](https://foundryvtt.com/packages/effective-transferral), for applying effects through item usage and the chatlog.
 - [Faster Rolling By Default](https://foundryvtt.com/packages/faster-rolling-by-default-5e), for faster rolling of all the system's core rolls.
+
+This module should not be used with WIRE or MIDI.
