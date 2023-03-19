@@ -1,5 +1,5 @@
-import { MODULE } from "./_constants.mjs";
-import { GroupConfig } from "./_groupConfig.mjs";
+import {MODULE} from "./_constants.mjs";
+import {GroupConfig} from "./_groupConfig.mjs";
 
 export function createConfigButton(sheet, html) {
   const item = sheet.object;
@@ -17,7 +17,7 @@ export function createConfigButton(sheet, html) {
   if (!sheet.isEditable || !length) return;
   editButton.addEventListener("click", () => {
     const string = "ROLLGROUPS.CONFIG.GROUP_CONFIG";
-    const title = game.i18n.format(string, { name: item.name });
-    new GroupConfig(item, { title }).render(true);
+    const title = game.i18n.format(string, {name: item.name});
+    new GroupConfig(item, {title}).render(true);
   });
 }

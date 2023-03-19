@@ -1,28 +1,24 @@
-import { MODULE } from "./_constants.mjs";
+import {MODULE} from "./_constants.mjs";
 
-export function createChatLogListeners(_, html) {
-  html[0].addEventListener("click", (event) => {
-
-    const button = event.target.closest("button[data-action='rollgroup-damage']");
-    if (!button) return;
-
-    const item = findItem(button);
+export function createChatLogListeners(message, html) {
+  html[0].querySelectorAll("[data-action='rollgroup-damage']").forEach(n => n.addEventListener("click", (event) => {
+    const item = findItem(event.currentTarget);
     if (!item) return;
 
-    const parts = constructPartsFromCard(item, button);
+    const parts = constructPartsFromCard(item, event.currentTarget);
     if (!parts) return;
 
     const clone = constructClone(item, parts);
 
-    const { spellLevel } = button.closest(`.${game.system.id}.chat-card.item-card`).dataset;
-    return clone.rollDamage({ spellLevel, event });
-  });
+    const {spellLevel} = event.currentTarget.closest(`.${game.system.id}.chat-card.item-card`).dataset;
+    return clone.rollDamage({spellLevel, event});
+  }));
 }
 
-export async function rollDamageGroup({ rollgroup = 0, critical = false, event = null, spellLevel = null, versatile = false, options = {} } = {}) {
+export async function rollDamageGroup({rollgroup = 0, critical = false, event = null, spellLevel = null, versatile = false, options = {}} = {}) {
   const group = this.getFlag(MODULE, "config.groups");
   if (!group?.length) {
-    return this.rollDamage({ critical, event, spellLevel, versatile, options });
+    return this.rollDamage({critical, event, spellLevel, versatile, options});
   }
   const indices = group[rollgroup]?.parts;
   if (!indices?.length) {
@@ -31,11 +27,11 @@ export async function rollDamageGroup({ rollgroup = 0, critical = false, event =
   }
   const parts = constructParts(this, indices);
   const clone = constructClone(this, parts);
-  return clone.rollDamage({ critical, event, spellLevel, versatile, options });
+  return clone.rollDamage({critical, event, spellLevel, versatile, options});
 }
 
 function constructClone(item, parts) {
-  const clone = item.clone({ "system.damage.parts": parts }, { keepId: true });
+  const clone = item.clone({"system.damage.parts": parts}, {keepId: true});
   if (item._ammo) {
     clone._ammo = item._ammo;
     delete item._ammo;
@@ -52,7 +48,7 @@ function constructPartsFromCard(item, button) {
 
 // general method to construct the PARTS for the clone, given an array of integers.
 function constructParts(item, groupParts) {
-  const { parts } = item.system.damage;
+  const {parts} = item.system.damage;
   const group = groupParts.reduce((acc, i) => {
     if (i < parts.length) acc.push(parts[i]);
     return acc;
@@ -66,8 +62,8 @@ function constructParts(item, groupParts) {
 }
 
 function findItem(button) {
-  const { itemUuid, actorUuid } = button.dataset;
-  const { messageId } = button.closest(".chat-message.message.flexcol").dataset;
+  const {itemUuid, actorUuid} = button.dataset;
+  const {messageId} = button.closest(".chat-message.message.flexcol").dataset;
   const message = game.messages.get(messageId);
   const itemData = message.getFlag(game.system.id, "itemData");
 
@@ -80,7 +76,7 @@ function findItem(button) {
       ui.notifications.error(game.i18n.localize("ROLLGROUPS.WARN.NO_ACTOR"));
       return false;
     }
-    item = new Item.implementation(itemData, { parent: actor });
+    item = new Item.implementation(itemData, {parent: actor});
   }
   return item;
 }
@@ -108,5 +104,5 @@ export function variantDamageLabels(item, config) {
   } else if (item.labels.damageTypes.length) {
     flavor = `${title} (${item.labels.damageTypes})`;
   }
-  foundry.utils.mergeObject(config, { title, flavor });
+  foundry.utils.mergeObject(config, {title, flavor});
 }

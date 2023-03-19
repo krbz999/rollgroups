@@ -1,4 +1,4 @@
-import { MODULE } from "./_constants.mjs";
+import {MODULE} from "./_constants.mjs";
 
 export function createDamageButtons(item, data) {
   const el = document.createElement("DIV");
@@ -17,7 +17,7 @@ export function createDamageButtons(item, data) {
   const mixedLabel = game.i18n.localize("ROLLGROUPS.LABELS.MIXED");
 
   // the button html.
-  const group = groups.reduce((acc, { label, parts }) => {
+  const group = groups.reduce((acc, {label, parts}) => {
     const r = "rollgroup-damage";
     const p = parts.join(";");
     const u = item.uuid;
