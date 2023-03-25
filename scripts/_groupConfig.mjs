@@ -57,7 +57,7 @@ export class GroupConfig extends FormApplication {
     data.versatile = this.object.isVersatile;
     data.choices = this.object.flags[MODULE]?.config?.groups?.map((g, n) => {
       return {value: n, label: g.label};
-    });
+    }) ?? [];
     data.selected = this.object.flags[MODULE]?.config?.versatile;
 
     return data;
