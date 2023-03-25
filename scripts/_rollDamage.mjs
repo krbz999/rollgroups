@@ -10,7 +10,7 @@ export function createChatLogListeners(message, html) {
 
     const clone = constructClone(item, parts);
 
-    const spellLevel = event.currentTarget.closest("[data-spell-level]").dataset.spellLevel;
+    const spellLevel = event.currentTarget.closest("[data-spell-level]")?.dataset.spellLevel;
     const versatile = event.currentTarget.dataset.action.endsWith("versatile");
     return clone.rollDamage({spellLevel, event, versatile});
   }));
