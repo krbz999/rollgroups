@@ -16,6 +16,10 @@ export class GroupConfig extends FormApplication {
     return `${MODULE}-groupconfig-${this.object.id}`;
   }
 
+  get title() {
+    return game.i18n.format("ROLLGROUPS.CONFIG.GROUP_CONFIG", {name: this.object.name});
+  }
+
   get parts() {
     return this.object.system.damage.parts.filter(([f]) => !!f);
   }
@@ -48,10 +52,18 @@ export class GroupConfig extends FormApplication {
       const group = this.columnHelper("empty");
       data.groups = [group];
     }
+
+    // Values and labels for 'Versatile' select.
+    data.versatile = this.object.isVersatile;
+    data.choices = this.object.flags[MODULE]?.config?.groups?.map((g, n) => {
+      return {value: n, label: g.label};
+    });
+    data.selected = this.object.flags[MODULE]?.config?.versatile;
+
     return data;
   }
 
-  async _updateObject() {
+  async _updateObject(event, formData) {
     const groupNodes = this.form.querySelectorAll(".group");
     const groups = [];
     for (const group of groupNodes) {
@@ -62,7 +74,8 @@ export class GroupConfig extends FormApplication {
       if (!parts.length) continue;
       groups.push({label, parts});
     }
-    return this.object.setFlag(MODULE, "config.groups", groups);
+    const versatile = formData["versatile"] ?? null;
+    return this.object.setFlag(MODULE, "config", {groups, versatile});
   }
 
   activateListeners(html) {
@@ -84,6 +97,34 @@ export class GroupConfig extends FormApplication {
     div.querySelector("[data-action='delete']").addEventListener("click", this._onClickDelete.bind(this));
     div.querySelector(".group-header > input").addEventListener("focus", this._onFocusName.bind(this));
     event.currentTarget.closest(".inputs").appendChild(div);
+    this._refreshVersatileOptions();
+  }
+
+  /**
+   * Refresh the options available in the 'Versatile' select,
+   * keeping the selected option if its group still exists.
+   */
+  _refreshVersatileOptions() {
+    const vers = this.element[0].querySelector("[name='versatile']");
+    if (!vers) return;
+    const selectedIndex = vers.selectedIndex;
+    const ph = game.i18n.localize("ROLLGROUPS.CONFIG.PLACEHOLDER");
+    const headers = this.element[0].querySelectorAll(".group-header > input");
+    vers.innerHTML = Array.from(headers).reduce((acc, group, idx) => {
+      const label = group.value || ph;
+      const value = idx;
+      return acc + `<option value="${value}">${label}</option>`;
+    }, "<option value></option>");
+    vers.selectedIndex = selectedIndex;
+  }
+
+  /**
+   * Change the presented labels in the 'Versatile' select when a group label changes.
+   * @override
+   */
+  _onChangeInput(event) {
+    super._onChangeInput(event);
+    if (event.target.type === "text") this._refreshVersatileOptions();
   }
 
   /**
@@ -100,6 +141,7 @@ export class GroupConfig extends FormApplication {
    */
   _onClickDelete(event) {
     event.currentTarget.closest(".group").remove();
+    this._refreshVersatileOptions();
   }
 
   columnHelper(util = "add") {

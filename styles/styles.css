@@ -15,7 +15,8 @@ form.rollgroups .group {
 }
 
 form.rollgroups .legend {
-  max-width: 125px;
+  min-width: 100px;
+  max-width: 200px;
 }
 
 form.rollgroups .inputs {
@@ -43,7 +44,7 @@ form.rollgroups > .inputs > * > * {
   white-space: nowrap;
 }
 
-form.rollgroups :last-child > :first-child {
+form.rollgroups .group:last-child > :first-child {
   border-radius: 0 10px 10px 0;
 }
 

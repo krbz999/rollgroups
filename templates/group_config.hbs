@@ -14,6 +14,16 @@
     </div>
     {{/each}}
   </div>
+  {{#if versatile}}
+  <div class="form-group">
+    <label data-tooltip="ROLLGROUPS.VersatileTooltip">{{localize "ROLLGROUPS.VersatileGroup"}}</label>
+    <div class="form-fields">
+      <select name="versatile">
+        {{selectOptions choices selected=selected labelAttr="label" nameAttr="value" blank=""}}
+      </select>
+    </div>
+  </div>
+  {{/if}}
   <div class="footer">
     <button name="submit"><i class="fa-solid fa-save"></i> {{localize "Save"}}</button>
   </div>

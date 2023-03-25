@@ -7,9 +7,11 @@ export function createDamageButtons(item, data) {
   const damageButton = el.querySelector(select);
   if (!damageButton) return;
 
-  const groups = item.getFlag(MODULE, "config.groups");
-  const validParts = item.system.damage?.parts.filter(([f]) => !!f);
-  if (!groups?.length || validParts.length < 2) return;
+  const {groups, versatile} = item.flags[MODULE]?.config ?? {};
+  if (!groups) return;
+
+  const validParts = item.system.damage.parts.filter(([f]) => !!f);
+  if (!groups.length || validParts.length < 2) return;
 
   // various labels.
   const damageLabel = game.i18n.localize("ROLLGROUPS.LABELS.DAMAGE");
@@ -21,7 +23,7 @@ export function createDamageButtons(item, data) {
     const r = "rollgroup-damage";
     const p = parts.join(";");
     const u = item.uuid;
-    const a = item.parent.uuid;
+    const a = item.actor.uuid;
     const types = parts.map(t => validParts[t][1]);
     const isDamage = types.every(t => t in CONFIG[game.system.id.toUpperCase()].damageTypes);
     const isHealing = types.every(t => t in CONFIG[game.system.id.toUpperCase()].healingTypes);
@@ -30,9 +32,23 @@ export function createDamageButtons(item, data) {
     return acc + `<button data-action="${r}" data-group-parts="${p}" data-item-uuid="${u}" data-actor-uuid="${a}">${l}</button>`;
   }, "");
 
+  // Replace the damage button(s).
   const dmg = document.createElement("DIV");
   dmg.innerHTML = group;
   damageButton.after(...dmg.children);
   damageButton.remove();
+
+  // Adjust the 'Versatile' button.
+  if (Number.isNumeric(versatile) && item.isVersatile) {
+    const parts = groups[versatile]?.parts.join(";");
+    if (parts) {
+      const vers = el.querySelector("[data-action='versatile']");
+      vers.setAttribute("data-action", "rollgroup-versatile");
+      vers.setAttribute("data-group-parts", parts);
+      vers.setAttribute("data-item-uuid", item.uuid);
+      vers.setAttribute("data-actor-uuid", item.actor.uuid);
+    }
+  }
+
   data.content = el.innerHTML;
 }

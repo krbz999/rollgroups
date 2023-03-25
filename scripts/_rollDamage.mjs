@@ -1,7 +1,7 @@
 import {MODULE} from "./_constants.mjs";
 
 export function createChatLogListeners(message, html) {
-  html[0].querySelectorAll("[data-action='rollgroup-damage']").forEach(n => n.addEventListener("click", (event) => {
+  html[0].querySelectorAll("[data-action^='rollgroup']").forEach(n => n.addEventListener("click", (event) => {
     const item = findItem(event.currentTarget);
     if (!item) return;
 
@@ -10,8 +10,9 @@ export function createChatLogListeners(message, html) {
 
     const clone = constructClone(item, parts);
 
-    const {spellLevel} = event.currentTarget.closest(`.${game.system.id}.chat-card.item-card`).dataset;
-    return clone.rollDamage({spellLevel, event});
+    const spellLevel = event.currentTarget.closest("[data-spell-level]").dataset.spellLevel;
+    const versatile = event.currentTarget.dataset.action.endsWith("versatile");
+    return clone.rollDamage({spellLevel, event, versatile});
   }));
 }
 
@@ -22,7 +23,7 @@ export async function rollDamageGroup({rollgroup = 0, critical = false, event = 
   }
   const indices = group[rollgroup]?.parts;
   if (!indices?.length) {
-    ui.notifications.error(game.i18n.localize("ROLLGROUPS.WARN.NO_FORMULAS"));
+    ui.notifications.error("ROLLGROUPS.WARN.NO_FORMULAS", {localize: true});
     return null;
   }
   const parts = constructParts(this, indices);
@@ -55,7 +56,7 @@ function constructParts(item, groupParts) {
   }, []);
   // there were no valid damage formulas.
   if (!group?.length) {
-    ui.notifications.error(game.i18n.localize("ROLLGROUPS.WARN.NO_FORMULAS"));
+    ui.notifications.error("ROLLGROUPS.WARN.NO_FORMULAS", {localize: true});
     return false;
   }
   return group;
@@ -73,7 +74,7 @@ function findItem(button) {
   } else {
     const actor = fromUuidSync(actorUuid);
     if (!actor) {
-      ui.notifications.error(game.i18n.localize("ROLLGROUPS.WARN.NO_ACTOR"));
+      ui.notifications.error("ROLLGROUPS.WARN.NO_ACTOR", {localize: true});
       return false;
     }
     item = new Item.implementation(itemData, {parent: actor});

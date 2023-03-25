@@ -1,5 +1,7 @@
 {
   "ROLLGROUPS": {
+    "VersatileGroup": "Versatile Group:",
+    "VersatileTooltip": "The roll group that the 'Versatile' button will roll. The first formula in the group will be replaced by the Versatile formula.",
     "WARN": {
       "NO_FORMULAS": "The roll group contains no formulas.",
       "NO_ACTOR": "The owner of this item no longer exists.",

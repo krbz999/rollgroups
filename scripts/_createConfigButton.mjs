@@ -16,8 +16,6 @@ export function createConfigButton(sheet, html) {
   // create listener.
   if (!sheet.isEditable || !length) return;
   editButton.addEventListener("click", () => {
-    const string = "ROLLGROUPS.CONFIG.GROUP_CONFIG";
-    const title = game.i18n.format(string, {name: item.name});
-    new GroupConfig(item, {title}).render(true);
+    new GroupConfig(item).render(true);
   });
 }
