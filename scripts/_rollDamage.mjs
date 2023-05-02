@@ -42,20 +42,21 @@ function constructClone(item, parts) {
 
 // card's method to retrieve the array of integers to construct the parts from.
 function constructPartsFromCard(item, button) {
-  const groupParts = button.dataset.groupParts?.split(";");
-  const group = constructParts(item, groupParts);
+  const idx = button.dataset.group;
+  const group = constructParts(item, idx);
   return group;
 }
 
 // general method to construct the PARTS for the clone, given an array of integers.
-function constructParts(item, groupParts) {
+function constructParts(item, idx) {
   const {parts} = item.system.damage;
-  const group = groupParts.reduce((acc, i) => {
-    if (i < parts.length) acc.push(parts[i]);
+  const indices = item.flags[MODULE].config.groups[idx]?.parts ?? [];
+  const group = parts.reduce((acc, part, i) => {
+    if (indices.includes(i)) acc.push(part);
     return acc;
   }, []);
   // there were no valid damage formulas.
-  if (!group?.length) {
+  if (!group.length) {
     ui.notifications.error("ROLLGROUPS.WARN.NO_FORMULAS", {localize: true});
     return false;
   }

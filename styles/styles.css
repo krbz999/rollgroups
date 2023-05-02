@@ -77,14 +77,10 @@ form.rollgroups .damage-header {
   border-bottom: groove;
 }
 
-/* CONFIG BUTTON */
-h4.damage-header a.rollgroups.config-button {
-  font-size: 12px;
-  border: 2px groove #eeede0;
-  background: rgba(0, 0, 0, 0.1);
-  padding: 2px 10px 2px 5px;
-  min-width: fit-content;
-  border-radius: 4px;
-  margin-left: 5px;
-  color: black;
+.rollgroups.config-button {
+  flex: 0 0 18px;
+  line-height: 24px;
+  float: right;
+  text-align: right;
+  color: #7a7971;
 }

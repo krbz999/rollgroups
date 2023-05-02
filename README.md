@@ -1,5 +1,4 @@
 # Roll Groups
-
 This module (for dnd5e and sw5e) lets you configure multiple damage buttons for each item on an actor. For the formulas ('damage parts') in the item, you can group them in as many different combinations as you would like.
 
 ## How to use
@@ -27,42 +26,6 @@ The function `Item#rollDamageGroups` is added and works exactly as `Item#rollDam
 ## Spell Scaling
 No special consideration needs to be kept in mind for spells. It works exactly as in core. A cantrip that scales with a scaling formula provided will add that formula at the appropriate levels, no matter the number of parts. A scaling cantrip with multiple formulas, and no specific scaling formula provided, will scale each formula that is rolled. Same as core system behavior. Leveled spells, as in core, will not scale unless a formula is provided. For more complex setups, consider using `@details.level` or `@item.level` in your formulas (for the character and spell level, respectively).
 
-## Migrating from MRE to Roll Groups in v10
-If you were using Minimal Rolling Enhancements in v9 and wish to migrate all actors in the world to using Roll Groups, this provided script will copy the roll group data of all the actors' items to the new format.
-
-```js
-for (const a of game.actors) {
-  console.log(`ROLLGROUPS: Migrating ${a.name}'s items.`);
-  const items = a.items.filter(i => {
-    return i.flags["mre-dnd5e"]?.formulaGroups?.length > 1;
-  });
-  const updates = items.map(i => {
-    let string = JSON.stringify(i.flags["mre-dnd5e"].formulaGroups);
-    string = string.replaceAll("formulaSet", "parts");
-    const object = JSON.parse(string);
-    return {_id: i.id, "flags.rollgroups.config.groups": object};
-  });
-  await a.updateEmbeddedDocuments("Item", updates);
-  console.log(`ROLLGROUPS: Successfully migrated ${a.name}'s items.`);
-}
-```
-
-Similarly this script migrates all items in the item directory. If you replace the 'pack' attribute with the key of a compendium, it will migrate all items in that compendium instead.
-
-```js
-console.log(`ROLLGROUPS: Migrating all items.`);
-const updates = game.items.filter(i => {
-  return i.flags["mre-dnd5e"]?.formulaGroups?.length > 1;
-}).map(i => {
-  let string = JSON.stringify(i.flags["mre-dnd5e"].formulaGroups);
-  string = string.replaceAll("formulaSet", "parts");
-  const object = JSON.parse(string);
-  return {_id: i.id, "flags.rollgroups.config.groups": object};
-});
-const updated = await Item.updateDocuments(updates, {pack: undefined});
-console.log(`ROLLGROUPS: Successfully migrated ${updated.length} items.`);
-```
-
 ### Complementary Modules
 These modules have all been confirmed to work without issues and complement Roll Groups.
 - [Build-a-Bonus](https://foundryvtt.com/packages/babonus), for applying niche bonuses in situational circumstances.
@@ -70,4 +33,4 @@ These modules have all been confirmed to work without issues and complement Roll
 - [Faster Rolling By Default](https://foundryvtt.com/packages/faster-rolling-by-default-5e), for faster rolling of all the system's core rolls.
 - [Visual Active Effects](https://foundryvtt.com/packages/visual-active-effects) combined with [Concentration Notifier](https://foundryvtt.com/packages/concentrationnotifier); the rollgroups buttons will display in the effects.
 
-This module should not be used with WIRE or MIDI.
+This module should not be used with RSR, WIRE, or MIDI.
