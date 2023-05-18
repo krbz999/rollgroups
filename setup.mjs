@@ -12,4 +12,5 @@ Hooks.once("setup", () => {
   Hooks.on("renderChatMessage", createChatLogListeners);
   Hooks.on("renderItemSheet", createConfigButton);
   Item.prototype.rollDamageGroup = rollDamageGroup;
+  loadTemplates(["modules/rollgroups/templates/column.hbs"]);
 });

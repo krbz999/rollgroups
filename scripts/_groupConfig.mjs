@@ -5,6 +5,7 @@ export class GroupConfig extends FormApplication {
     super(item, options);
   }
 
+  /** @override */
   static get defaultOptions() {
     return foundry.utils.mergeObject(super.defaultOptions, {
       template: `modules/${MODULE}/templates/group_config.hbs`,
@@ -12,28 +13,31 @@ export class GroupConfig extends FormApplication {
     });
   }
 
+  /** @override */
   get id() {
     return `${MODULE}-groupconfig-${this.object.id}`;
   }
 
+  /** @override */
   get title() {
     return game.i18n.format("ROLLGROUPS.CONFIG.GROUP_CONFIG", {name: this.object.name});
   }
 
+  /**
+   * Get the damage parts of an item, filtered for valid ones only.
+   * @returns {array[]}     The array of array of formulas and types.
+   */
   get parts() {
     return this.object.system.damage.parts.filter(([f]) => !!f);
   }
 
-  get groups() {
-    return this.columnHelper("dataGet");
-  }
-
+  /** @override */
   async getData() {
     const data = await super.getData();
 
     const types = foundry.utils.mergeObject(
-      foundry.utils.duplicate(CONFIG[game.system.id.toUpperCase()].damageTypes),
-      foundry.utils.duplicate(CONFIG[game.system.id.toUpperCase()].healingTypes)
+      foundry.utils.deepClone(CONFIG[game.system.id.toUpperCase()].damageTypes),
+      foundry.utils.deepClone(CONFIG[game.system.id.toUpperCase()].healingTypes)
     );
 
     // construct the left column of formulas.
@@ -45,13 +49,7 @@ export class GroupConfig extends FormApplication {
     }, []);
 
     // construct the group columns.
-    if (this.groups) {
-      data.groups = this.groups;
-    } else {
-      // if no groups, then create a single group with all formulas unchecked.
-      const group = this.columnHelper("empty");
-      data.groups = [group];
-    }
+    data.groups = this.columnHelper("data");
 
     // Values and labels for 'Versatile' select.
     data.versatile = this.object.isVersatile;
@@ -63,6 +61,7 @@ export class GroupConfig extends FormApplication {
     return data;
   }
 
+  /** @override */
   async _updateObject(event, formData) {
     const groupNodes = this.form.querySelectorAll(".group");
     const groups = [];
@@ -78,6 +77,7 @@ export class GroupConfig extends FormApplication {
     return this.object.setFlag(MODULE, "config", {groups, versatile});
   }
 
+  /** @override */
   activateListeners(html) {
     super.activateListeners(html);
     html[0].querySelectorAll("[data-action='add']").forEach(n => n.addEventListener("click", this._onClickAdd.bind(this)));
@@ -89,11 +89,11 @@ export class GroupConfig extends FormApplication {
    * Handle adding a new column.
    * @param {PointerEvent} event      The initiating click event.
    */
-  _onClickAdd(event) {
-    const group = this.columnHelper("add");
+  async _onClickAdd(event) {
+    const group = this.columnHelper("empty");
     const div = document.createElement("DIV");
     div.classList.add("group");
-    div.innerHTML = group;
+    div.innerHTML = await renderTemplate("modules/rollgroups/templates/column.hbs", group[0]);
     div.querySelector("[data-action='delete']").addEventListener("click", this._onClickDelete.bind(this));
     div.querySelector(".group-header > input").addEventListener("focus", this._onFocusName.bind(this));
     event.currentTarget.closest(".inputs").appendChild(div);
@@ -101,8 +101,7 @@ export class GroupConfig extends FormApplication {
   }
 
   /**
-   * Refresh the options available in the 'Versatile' select,
-   * keeping the selected option if its group still exists.
+   * Refresh the options available in the 'Versatile' select, keeping the selected option if its group still exists.
    */
   _refreshVersatileOptions() {
     const vers = this.element[0].querySelector("[name='versatile']");
@@ -144,38 +143,31 @@ export class GroupConfig extends FormApplication {
     this._refreshVersatileOptions();
   }
 
-  columnHelper(util = "add") {
+  /**
+   * Create the data for the existing column(s), or a new empty column if none exist.
+   * @param {string} util     The type of data to retrieve. 'data' for the initial data and 'empty' for an empty column.
+   * @returns {object[]}      An array of data objects for one or more columns.
+   */
+  columnHelper(util) {
     const length = this.parts.length;
-    const placeholder = game.i18n.localize("ROLLGROUPS.CONFIG.PLACEHOLDER");
 
-    if (["add", "empty"].includes(util)) {
-      let group = `<div class="group-header"><input type="text" placeholder="${placeholder}"></div>`;
-      const row = `<div class="group-row"><input type="checkbox"></div>`;
-      const foot = `<a data-action="delete"><i class="fa-solid fa-trash"></i></a>`;
-      group += Array.fromRange(length).fill(row).join("");
-
-      if (util === "add") return group + foot;
-      else if (util === "empty") return group;
+    // Create one empty column's data.
+    if (util === "empty") {
+      return [{rows: Array(length).fill({checked: false})}];
     }
 
-    if (util === "dataGet") {
+    // Get the columns for initial rendering when any exist. If none exist, return an empty column.
+    else if (util === "data") {
       const flags = this.object.flags[MODULE]?.config?.groups;
-      if (!flags?.length) return false;
+      if (!flags?.length) return this.columnHelper("empty");
 
       const groups = flags.map(({label, parts}) => {
-        const head = `
-        <div class="group-header">
-          <input type="text" value="${label}" placeholder="${placeholder}">
-        </div>`;
-        const rows = Array.fromRange(length).reduce((acc, e) => {
-          const checked = parts.includes(e) ? "checked" : "";
-          return acc + `<div class="group-row"><input type="checkbox" ${checked}></div>`;
-        }, "");
-        return head + rows;
+        const rows = Array.fromRange(length).map(n => {
+          return {checked: parts.includes(n)};
+        });
+        return {label, rows};
       });
       return groups;
     }
-
-    return false;
   }
 }

@@ -16,7 +16,14 @@ export function createChatLogListeners(message, html) {
   }));
 }
 
-export async function rollDamageGroup({rollgroup = 0, critical = false, event = null, spellLevel = null, versatile = false, options = {}} = {}) {
+export async function rollDamageGroup({
+  rollgroup = 0,
+  critical = false,
+  event = null,
+  spellLevel = null,
+  versatile = false,
+  options = {}
+} = {}) {
   const group = this.getFlag(MODULE, "config.groups");
   if (!group?.length) {
     return this.rollDamage({critical, event, spellLevel, versatile, options});
@@ -64,16 +71,14 @@ function constructParts(item, idx) {
 }
 
 function findItem(button) {
-  const {itemUuid, actorUuid} = button.dataset;
-  const {messageId} = button.closest(".chat-message.message.flexcol").dataset;
-  const message = game.messages.get(messageId);
-  const itemData = message.getFlag(game.system.id, "itemData");
+  const message = game.messages.get(button.closest(".chat-message.message.flexcol").dataset.messageId);
+  const itemData = message.flags[game.system.id]?.itemData;
 
   let item;
   if (!itemData) {
-    item = fromUuidSync(itemUuid);
+    item = fromUuidSync(button.dataset.itemUuid);
   } else {
-    const actor = fromUuidSync(actorUuid);
+    const actor = fromUuidSync(button.dataset.actorUuid);
     if (!actor) {
       ui.notifications.error("ROLLGROUPS.WARN.NO_ACTOR", {localize: true});
       return false;
@@ -90,10 +95,8 @@ function findItem(button) {
   Anything else shows "Damage (...types)"
 */
 export function variantDamageLabels(item, config) {
-  const labels = new Set(item.getDerivedDamageLabel().map(i => {
-    return i.damageType;
-  }));
-  const isTemp = labels.size === 1 && labels.first() === "temphp";
+  const labels = new Set(item.getDerivedDamageLabel().map(i => i.damageType));
+  const isTemp = (labels.size === 1) && labels.has("temphp");
   const string = labels.every(t => {
     return t in CONFIG[game.system.id.toUpperCase()].healingTypes;
   }) ? `${game.system.id.toUpperCase()}.Healing` : `${game.system.id.toUpperCase()}.DamageRoll`;
