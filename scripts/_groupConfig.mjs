@@ -20,7 +20,7 @@ export class GroupConfig extends FormApplication {
 
   /** @override */
   get title() {
-    return game.i18n.format("ROLLGROUPS.CONFIG.GROUP_CONFIG", {name: this.object.name});
+    return game.i18n.format("ROLLGROUPS.GroupConfigName", {name: this.object.name});
   }
 
   /**
@@ -67,7 +67,7 @@ export class GroupConfig extends FormApplication {
     const groups = [];
     for (const group of groupNodes) {
       let label = group.querySelector(".group-header > input").value;
-      if (!label) label = game.i18n.localize("ROLLGROUPS.CONFIG.DAMAGE");
+      if (!label) label = game.i18n.localize("ROLLGROUPS.Damage");
       const boxes = group.querySelectorAll(".group-row > input");
       const parts = Array.fromRange(boxes.length).filter(i => boxes[i].checked);
       if (!parts.length) continue;
@@ -107,7 +107,7 @@ export class GroupConfig extends FormApplication {
     const vers = this.element[0].querySelector("[name='versatile']");
     if (!vers) return;
     const selectedIndex = vers.selectedIndex;
-    const ph = game.i18n.localize("ROLLGROUPS.CONFIG.PLACEHOLDER");
+    const ph = game.i18n.localize("ROLLGROUPS.GroupPlaceholder");
     const headers = this.element[0].querySelectorAll(".group-header > input");
     vers.innerHTML = Array.from(headers).reduce((acc, group, idx) => {
       const label = group.value || ph;

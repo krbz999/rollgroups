@@ -1,5 +1,11 @@
 import {MODULE} from "./_constants.mjs";
 
+/**
+ * Create the damage buttons on a chat card when an item is used.
+ * Hooks on 'preDisplayCard'.
+ * @param {Item} item       The item being displayed.
+ * @param {object} data     The data object of the message to be created.
+ */
 export function createDamageButtons(item, data) {
   const el = document.createElement("DIV");
   el.innerHTML = data.content;
@@ -13,9 +19,9 @@ export function createDamageButtons(item, data) {
   if (!groups.length || (validParts.length < 2)) return;
 
   // various labels.
-  const damageLabel = game.i18n.localize("ROLLGROUPS.LABELS.DAMAGE");
-  const healingLabel = game.i18n.localize("ROLLGROUPS.LABELS.HEALING");
-  const mixedLabel = game.i18n.localize("ROLLGROUPS.LABELS.MIXED");
+  const damageLabel = game.i18n.localize("ROLLGROUPS.Damage");
+  const healingLabel = game.i18n.localize("ROLLGROUPS.Healing");
+  const mixedLabel = game.i18n.localize("ROLLGROUPS.Mixed");
 
   // the button html.
   const group = groups.reduce((acc, {label, parts}, idx) => {
