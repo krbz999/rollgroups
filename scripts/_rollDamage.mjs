@@ -1,4 +1,6 @@
 import {MODULE} from "./_constants.mjs";
+import {createDamageButtons} from "./_createDamageButtons.mjs";
+import {WeaponPicker} from "./weaponPicker.mjs";
 
 /**
  * Create the listener for each rollgroups button in a chat message.
@@ -7,20 +9,30 @@ import {MODULE} from "./_constants.mjs";
  * @param {HTMLElement} html        The element of the message.
  */
 export function createChatLogListeners(message, html) {
-  html[0].querySelectorAll("[data-action^='rollgroup']").forEach(n => n.addEventListener("click", (event) => {
-    const item = findItem(event.currentTarget);
-    if (!item) return;
+  html[0].querySelectorAll("[data-action='rollgroup-damage'], [data-action='rollgroup-versatile']").forEach(n => {
+    n.addEventListener("click", (event) => {
+      const item = findItem(event.currentTarget);
+      if (!item) return;
 
-    const idx = event.currentTarget.dataset.group;
-    const parts = constructParts(item, idx);
-    if (!parts) return;
+      const idx = event.currentTarget.dataset.group;
+      const parts = constructParts(item, idx);
+      if (!parts) return;
 
-    const clone = constructClone(item, parts);
+      const clone = constructClone(item, parts);
 
-    const spellLevel = event.currentTarget.closest("[data-spell-level]")?.dataset.spellLevel;
-    const versatile = event.currentTarget.dataset.action.endsWith("versatile");
-    return clone.rollDamage({spellLevel, event, versatile});
-  }));
+      const spellLevel = event.currentTarget.closest("[data-spell-level]")?.dataset.spellLevel;
+      const versatile = event.currentTarget.dataset.action.endsWith("versatile");
+      return clone.rollDamage({spellLevel, event, versatile});
+    });
+  });
+
+  html[0].querySelectorAll("[data-action='rollgroup-bladecantrip-attack']").forEach(n => {
+    n.addEventListener("click", (event) => pickEquippedWeapon(event, "attack"));
+  });
+
+  html[0].querySelectorAll("[data-action='rollgroup-bladecantrip-damage']").forEach(n => {
+    n.addEventListener("click", (event) => pickEquippedWeapon(event, "damage"));
+  });
 }
 
 /**
@@ -40,12 +52,17 @@ export async function rollDamageGroup({
   if (!group?.length) {
     return this.rollDamage({critical, event, spellLevel, versatile, options});
   }
+
+  // Bail out prematurely if the given rollgroup is empty or does not exist.
   const indices = group[rollgroup]?.parts;
   if (!indices?.length) {
     ui.notifications.error("ROLLGROUPS.RollGroupEmpty", {localize: true});
     return null;
   }
-  const parts = constructParts(this, indices);
+
+  // Construct the damage parts and the clone.
+  const parts = constructParts(this, rollgroup);
+  if (!parts) return null;
   const clone = constructClone(this, parts);
   return clone.rollDamage({critical, event, spellLevel, versatile, options});
 }
@@ -132,4 +149,41 @@ export function variantDamageLabels(item, config) {
     flavor = `${title} (${item.labels.damageTypes})`;
   }
   foundry.utils.mergeObject(config, {title, flavor});
+}
+
+/**
+ * Helper function to pick one of the actor's equipped melee weapons.
+ * @param {PointerEvent} event      The initiating click event.
+ * @param {string} type             The type of roll to perform ('attack' or 'damage').
+ * @returns // an attack roll, damage roll, or null.
+ */
+async function pickEquippedWeapon(event, type) {
+  const picker = new WeaponPicker(event);
+  const weps = picker.equippedWeapons;
+
+  // Case 1: No equipped weapons. Bail out.
+  if (!weps.length) {
+    ui.notifications.warn(game.i18n.format("ROLLGROUPS.NoEquippedWeapons", {actor: picker.actor.name}));
+    return null;
+  }
+
+  // Case 2: More than one weapon. Select one.
+  else if (weps.length > 1) {
+    return picker.render(true);
+  }
+
+  // Case 3: There is one weapon, and we want to roll attack.
+  else if (type === "attack") {
+    return weps[0].rollAttack({event});
+  }
+
+  // Case 4: There is one weapon, and we want to roll damage - but it has rollgroups or is versatile.
+  else if (weps[0].isVersatile || createDamageButtons(weps[0])) {
+    return picker.render(true);
+  }
+
+  // Case 5: There is one weapon, and we want to roll damage, and it has only one formula.
+  else {
+    return weapon.rollDamage({event, options: {parts: picker._scaleCantripDamage()}});
+  }
 }

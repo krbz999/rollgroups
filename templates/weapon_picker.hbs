@@ -1,0 +1,26 @@
+<div class="content">
+  <section class="weapons">
+    {{#each weapons}}
+    <div class="weapon" data-item-id="{{weapon.id}}">
+      <a data-tooltip="{{weapon.name}}" data-action="roll">
+        <img src="{{weapon.img}}">
+      </a>
+      <button data-action="attack">
+        {{localize "ROLLGROUPS.Attack"}}
+      </button>
+      {{#if context}}
+      {{{context}}}
+      {{else}}
+      <button data-action="rollgroup-damage">
+        {{localize "ROLLGROUPS.Damage"}}
+      </button>
+      {{/if}}
+      {{#if weapon.isVersatile}}
+      <button data-action="rollgroup-damage" data-versatile="versatile">
+        {{localize "ROLLGROUPS.Versatile"}}
+      </button>
+      {{/if}}
+    </div>
+    {{/each}}
+  </section>
+</div>

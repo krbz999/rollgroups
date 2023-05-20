@@ -1,7 +1,8 @@
 /* GROUP CONFIG */
-.app.window-app.rollgroups {
+.rollgroups.group-config {
   width: auto !important;
   height: auto !important;
+  min-width: 300px !important;
 }
 
 form.rollgroups,
@@ -83,4 +84,43 @@ form.rollgroups .damage-header {
   float: right;
   text-align: right;
   color: #7a7971;
+}
+
+/* WEAPON PICKER */
+.rollgroups.weapon-picker {
+  max-width: 500px !important;
+  width: auto !important;
+  height: auto !important;
+}
+
+.rollgroups.weapon-picker .weapons {
+  height: auto;
+  overflow: auto;
+  display: flex;
+  max-width: 100%;
+  gap: 5px;
+  scroll-behavior: smooth;
+}
+
+.rollgroups.weapon-picker .weapon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 150px;
+  margin-bottom: 5px;
+}
+
+.rollgroups.weapon-picker .weapon img {
+  max-height: 150px;
+  max-width: 150px;
+}
+
+.rollgroups.weapon-picker button {
+  font-size: 12px;
+  height: 24px;
+  line-height: 20px;
+  margin: 2px 0;
+  background: rgba(0, 0, 0, 0.1);
+  border: 2px groove #eeede0;
+  width: 95%;
 }

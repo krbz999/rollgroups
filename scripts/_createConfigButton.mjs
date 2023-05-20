@@ -1,5 +1,5 @@
 import {MODULE} from "./_constants.mjs";
-import {GroupConfig} from "./_groupConfig.mjs";
+import {GroupConfig} from "./groupConfig.mjs";
 
 /**
  * Create the button in item sheets to open the roll groups config menu.
