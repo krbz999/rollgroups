@@ -1,8 +1,8 @@
 {
   "ROLLGROUPS.Attack": "Attack",
   "ROLLGROUPS.BladeCantrip": "Is Blade Cantrip?",
-  "ROLLGROUPS.BladeCantripAttack": "Blade Cantrip Attack",
-  "ROLLGROUPS.BladeCantripDamage": "Blade Cantrip Damage",
+  "ROLLGROUPS.BladeCantripAttack": "Weapon Attack",
+  "ROLLGROUPS.BladeCantripDamage": "Combined Damage",
   "ROLLGROUPS.BladeCantripTooltip": "Is this a cantrip like 'Booming Blade' or 'Green-Flame Blade'?",
   "ROLLGROUPS.Damage": "Damage",
   "ROLLGROUPS.Formula": "Formula",

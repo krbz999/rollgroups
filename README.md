@@ -5,26 +5,28 @@ This module (for dnd5e and sw5e) lets you configure multiple damage buttons for 
 On any item containing a damage formula, there is a configuration button next to the 'Damage Formula' header.
 
 <p align="center">
-    <img src="https://i.imgur.com/nurikBk.png">
+  <img src="https://i.imgur.com/IgBgjKA.png">
 </p>
 
-Clicking this button opens the configuration menu. Create as many groups as you like, and give each a name. Tick any damage parts that should be included in the roll.
+Clicking this button opens the configuration menu. Create as many groups as you like, and give each a name. Tick any damage parts that should be included in the roll. When using the item, the normal damage button is replaced with one button for each group. Configuring damage groups on an item will not affect any other attributes of the item. Specifically, the 'Versatile Damage' and 'Other Formula' fields will still be available and function identically to core system behavior.
 
 <p align="center">
-    <img src="https://i.imgur.com/a8u6Wfw.png">
+  <img src="https://i.imgur.com/cW0o2ie.png">
 </p>
 
-When using the item, the normal damage button is replaced with one button for each group. Configuring damage groups on an item will not affect any other attributes of the item. Specifically, the 'Versatile Damage' and 'Other Formula' fields will still be available and function identically to core system behavior.
+## Versatile Damage
+In the group config, when adjusting the roll groups of an item with a formula in 'Versatile', you can denote which group should be rolled when clicking that button in the chat.
+
+## Blade Cantrips
+The module has additional support for blade cantrips such as 'Booming Blade' and 'Green-Flame Blade'. In the group config, when adjusting a cantrip that has a damage formula, you can check the box to denote this as a 'Blade Cantrip'. When the spell is cast, the caster will then be given a button in the item's message to let them quickly roll attack and damage (with the cantrip's damage added on top) with one of their equipped weapons.
 
 <p align="center">
-    <img src="https://i.imgur.com/cW0o2ie.png">
+  <img src="https://i.imgur.com/bGw0DFb.png">
+  <img src="https://i.imgur.com/W4fmsL2.png">
 </p>
 
 ## Macros
 The function `Item#rollDamageGroups` is added and works exactly as `Item#rollDamage`, and in addition accepts the key `rollgroup`, which is an integer denoting which group to roll (starting at zero).
-
-## Spell Scaling
-No special consideration needs to be kept in mind for spells. It works exactly as in core. A cantrip that scales with a scaling formula provided will add that formula at the appropriate levels, no matter the number of parts. A scaling cantrip with multiple formulas, and no specific scaling formula provided, will scale each formula that is rolled. Same as core system behavior. Leveled spells, as in core, will not scale unless a formula is provided. For more complex setups, consider using `@details.level` or `@item.level` in your formulas (for the character and spell level, respectively).
 
 ### Complementary Modules
 These modules have all been confirmed to work without issues and complement Roll Groups.
