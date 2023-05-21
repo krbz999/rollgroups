@@ -9,30 +9,38 @@ import {WeaponPicker} from "./weaponPicker.mjs";
  * @param {HTMLElement} html        The element of the message.
  */
 export function createChatLogListeners(message, html) {
-  html[0].querySelectorAll("[data-action='rollgroup-damage'], [data-action='rollgroup-versatile']").forEach(n => {
-    n.addEventListener("click", (event) => {
-      const item = findItem(event.currentTarget);
-      if (!item) return;
-
-      const idx = event.currentTarget.dataset.group;
-      const parts = constructParts(item, idx);
-      if (!parts) return;
-
-      const clone = constructClone(item, parts);
-
-      const spellLevel = event.currentTarget.closest("[data-spell-level]")?.dataset.spellLevel;
-      const versatile = event.currentTarget.dataset.action.endsWith("versatile");
-      return clone.rollDamage({spellLevel, event, versatile});
-    });
+  html[0].querySelectorAll("[data-action^='rollgroup-damage']").forEach(n => {
+    n.addEventListener("click", rollDamageFromChat);
   });
 
-  html[0].querySelectorAll("[data-action='rollgroup-bladecantrip-attack']").forEach(n => {
-    n.addEventListener("click", (event) => pickEquippedWeapon(event, "attack"));
+  html[0].querySelectorAll("[data-action^='rollgroup-bladecantrip']").forEach(n => {
+    n.addEventListener("click", pickEquippedWeapon);
   });
+}
 
-  html[0].querySelectorAll("[data-action='rollgroup-bladecantrip-damage']").forEach(n => {
-    n.addEventListener("click", (event) => pickEquippedWeapon(event, "damage"));
-  });
+/**
+ * Make a damage roll using one of the buttons created in the chatlog.
+ * @param {PointerEvent} event      The initiating click event.
+ * @returns // see Item#rollDamage.
+ */
+function rollDamageFromChat(event) {
+  const item = findItem(event);
+  if (!item) return;
+
+  // The array index of the group to roll, and the parts that belong to it.
+  const idx = event.currentTarget.dataset.group;
+  const parts = constructParts(item, idx);
+  if (!parts) return;
+
+  // A clone of the item with different damage parts.
+  const clone = constructClone(item, parts);
+
+  // Additional configurations for the damage roll.
+  const spellLevel = event.currentTarget.closest("[data-spell-level]")?.dataset.spellLevel;
+  const versatile = event.currentTarget.dataset.action.endsWith("versatile");
+
+  // Return the damage roll.
+  return clone.rollDamage({event, spellLevel, versatile});
 }
 
 /**
@@ -104,25 +112,28 @@ function constructParts(item, idx) {
 
 /**
  * Find or create an item. If the message has embedded itemData, prefer that.
- * @param {HTMLElement} button      The button that was clicked.
- * @returns {Item}                  A found or constructed item.
+ * @param {PointerEvent} event      The initiating click event.
+ * @returns {Item|null}             A found or constructed item, otherwise null.
  */
-function findItem(button) {
-  const message = game.messages.get(button.closest(".chat-message.message.flexcol").dataset.messageId);
+function findItem(event) {
+  const button = event.currentTarget;
+  const message = game.messages.get(button.closest("[data-message-id]").dataset.messageId);
   const itemData = message.flags[game.system.id]?.itemData;
 
-  let item;
-  if (!itemData) {
-    item = fromUuidSync(button.dataset.itemUuid);
-  } else {
+  // Case 1: Embedded item data in the message, construct a temporary item.
+  if (itemData) {
     const actor = fromUuidSync(button.dataset.actorUuid);
     if (!actor) {
       ui.notifications.error("ROLLGROUPS.ItemOwnerMissing", {localize: true});
-      return false;
+      return null;
     }
-    item = new Item.implementation(itemData, {parent: actor});
+    return new Item.implementation(itemData, {parent: actor});
   }
-  return item;
+
+  // Case 2: No item data, find the existing item.
+  else if (!itemData) {
+    return fromUuidSync(button.dataset.itemUuid);
+  }
 }
 
 /**
@@ -154,10 +165,9 @@ export function variantDamageLabels(item, config) {
 /**
  * Helper function to pick one of the actor's equipped melee weapons.
  * @param {PointerEvent} event      The initiating click event.
- * @param {string} type             The type of roll to perform ('attack' or 'damage').
  * @returns // an attack roll, damage roll, or null.
  */
-async function pickEquippedWeapon(event, type) {
+async function pickEquippedWeapon(event) {
   const picker = new WeaponPicker(event);
   const weps = picker.equippedWeapons;
 
@@ -173,7 +183,7 @@ async function pickEquippedWeapon(event, type) {
   }
 
   // Case 3: There is one weapon, and we want to roll attack.
-  else if (type === "attack") {
+  else if (event.currentTarget.dataset.action.endsWith("attack")) {
     return weps[0].rollAttack({event});
   }
 
@@ -184,6 +194,6 @@ async function pickEquippedWeapon(event, type) {
 
   // Case 5: There is one weapon, and we want to roll damage, and it has only one formula.
   else {
-    return weapon.rollDamage({event, options: {parts: picker._scaleCantripDamage()}});
+    return weps[0].rollDamage({event, options: {parts: picker._scaleCantripDamage()}});
   }
 }

@@ -24,7 +24,7 @@ export function manageCardButtons(item, data) {
   // Adjust the 'Versatile' button.
   if (buttons && Number.isNumeric(config.versatile) && item.isVersatile) {
     const vers = el.querySelector("[data-action='versatile']");
-    vers.setAttribute("data-action", "rollgroup-versatile");
+    vers.setAttribute("data-action", "rollgroup-damage-versatile");
     vers.setAttribute("data-group", config.versatile);
     vers.setAttribute("data-item-uuid", item.uuid);
     vers.setAttribute("data-actor-uuid", item.actor.uuid);

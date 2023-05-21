@@ -3,16 +3,16 @@ import {createDamageButtons} from "./_createDamageButtons.mjs";
 
 export class WeaponPicker extends Application {
   /**
+   * @constructor
    * @param {PointerEvent} event      The initiating click event.
    */
   constructor(event) {
     super();
     this.actor = fromUuidSync(event.currentTarget.dataset.actorUuid);
     this.cantrip = this.actor.items.get(event.currentTarget.closest("[data-item-id]").dataset.itemId);
-    this.equippedWeapons = this.actor.items.reduce((acc, item) => {
-      if ((item.type === "weapon") && item.system.equipped && (item.system.actionType === "mwak")) acc.push(item);
-      return acc;
-    }, []);
+    this.equippedWeapons = this.actor.items.filter(item => {
+      return (item.type === "weapon") && item.system.equipped && item.hasAttack && item.hasDamage;
+    });
   }
 
   /** @override */
@@ -59,6 +59,7 @@ export class WeaponPicker extends Application {
     const weapon = this.actor.items.get(event.currentTarget.closest("[data-item-id]").dataset.itemId);
     const attack = await weapon.rollAttack({event});
     if (!attack) return null;
+    this.close();
     return weapon.rollDamageGroup({options: {parts: this._scaleCantripDamage()}});
   }
 
@@ -92,15 +93,11 @@ export class WeaponPicker extends Application {
     const parts = this._scaleCantripDamage();
     const versatile = "versatile" in event.currentTarget.dataset; // Whether to roll versatile damage.
     const group = "group" in event.currentTarget.dataset; // Whether to roll a specific group.
-    if (versatile) {
-      const rollgroup = weapon.flags[MODULE]?.config?.versatile ?? 0;
-      return weapon.rollDamageGroup({event, rollgroup, versatile, options: {parts}});
-    } else if (group) {
-      const rollgroup = event.currentTarget.dataset.group;
-      return weapon.rollDamageGroup({event, rollgroup, options: {parts}});
-    } else {
-      return weapon.rollDamageGroup({event, options: {parts}});
-    }
+
+    const config = {event, options: {parts}, versatile};
+    if (versatile) config.rollgroup = weapon.flags[MODULE]?.config?.versatile ?? 0;
+    else if (group) config.rollgroup = event.currentTarget.dataset.group;
+    return weapon.rollDamageGroup(config);
   }
 
   /**
