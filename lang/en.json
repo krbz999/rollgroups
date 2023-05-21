@@ -1,4 +1,9 @@
 {
+  "ROLLGROUPS.Attack": "Attack",
+  "ROLLGROUPS.BladeCantrip": "Is Blade Cantrip?",
+  "ROLLGROUPS.BladeCantripAttack": "Blade Cantrip Attack",
+  "ROLLGROUPS.BladeCantripDamage": "Blade Cantrip Damage",
+  "ROLLGROUPS.BladeCantripTooltip": "Is this a cantrip like 'Booming Blade' or 'Green-Flame Blade'?",
   "ROLLGROUPS.Damage": "Damage",
   "ROLLGROUPS.Formula": "Formula",
   "ROLLGROUPS.GroupConfig": "Group Config",
@@ -7,8 +12,12 @@
   "ROLLGROUPS.Healing": "Healing",
   "ROLLGROUPS.ItemOwnerMissing": "The owner of this item no longer exists.",
   "ROLLGROUPS.Mixed": "Mixed",
+  "ROLLGROUPS.NoEquippedWeapons": "The actor '{actor}' has no melee weapon equipped.",
   "ROLLGROUPS.OpenConfig": "Open the Roll Group configuration menu",
+  "ROLLGROUPS.PickWeapon": "Pick Weapon: {name}",
   "ROLLGROUPS.RollGroupEmpty": "The roll group contains no formulas.",
+  "ROLLGROUPS.Versatile": "Versatile",
   "ROLLGROUPS.VersatileGroup": "Versatile Group:",
-  "ROLLGROUPS.VersatileTooltip": "The roll group that the 'Versatile' button will roll. The first formula in the group will be replaced by the Versatile formula."
+  "ROLLGROUPS.VersatileTooltip": "The roll group that the 'Versatile' button will roll. The first formula in the group will be replaced by the Versatile formula.",
+  "ROLLGROUPS.Weapon": "Weapon"
 }

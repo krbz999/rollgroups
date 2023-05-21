@@ -25,6 +25,14 @@
     </div>
   </div>
   {{/if}}
+  {{#if eligibleBladeCantrip}}
+  <div class="form-group">
+    <label data-tooltip="ROLLGROUPS.BladeCantripTooltip">{{localize "ROLLGROUPS.BladeCantrip"}}</label>
+    <div class="form-fields">
+      <input type="checkbox" name="bladeCantrip" {{checked isBladeCantrip}}>
+    </div>
+  </div>
+  {{/if}}
   <div class="footer">
     <button name="submit">
       <i class="fa-solid fa-save"></i> {{localize "Save"}}
