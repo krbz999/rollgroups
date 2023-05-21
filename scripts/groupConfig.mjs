@@ -1,8 +1,12 @@
 import {MODULE} from "./_constants.mjs";
 
 export class GroupConfig extends FormApplication {
-  constructor(item, options) {
-    super(item, options);
+  /**
+   * @constructor
+   * @param {Item} item           The item to whom this config belongs.
+   */
+  constructor(item) {
+    super(item);
     this.item = item;
   }
 
@@ -54,9 +58,7 @@ export class GroupConfig extends FormApplication {
 
     // Values and labels for 'Versatile' select.
     data.versatile = this.item.isVersatile;
-    data.choices = this.item.flags[MODULE]?.config?.groups?.map((g, n) => {
-      return {value: n, label: g.label};
-    }) ?? [];
+    data.choices = this.item.flags[MODULE]?.config?.groups?.map((g, n) => ({value: n, label: g.label})) ?? [];
     data.selected = this.item.flags[MODULE]?.config?.versatile;
 
     // If it can be and is a blade cantrip.
@@ -70,10 +72,12 @@ export class GroupConfig extends FormApplication {
   async _updateObject(event, formData) {
     const groupNodes = this.form.querySelectorAll(".group");
     const groups = [];
+    let idx = 0;
     for (const group of groupNodes) {
-      let label = group.querySelector(".group-header > input").value;
-      if (!label) label = game.i18n.localize("ROLLGROUPS.Damage");
-      const boxes = group.querySelectorAll(".group-row > input");
+      idx++;
+      let label = group.querySelector("[type='text']").value;
+      if (!label) label = game.i18n.format("ROLLGROUPS.RollGroupIdx", {idx});
+      const boxes = group.querySelectorAll("[type='checkbox']");
       const parts = Array.fromRange(boxes.length).filter(i => boxes[i].checked);
       if (!parts.length) continue;
       groups.push({label, parts});
@@ -92,7 +96,7 @@ export class GroupConfig extends FormApplication {
     html[0].querySelectorAll("[data-action='delete']").forEach(n => {
       n.addEventListener("click", this._onClickDelete.bind(this));
     });
-    html[0].querySelectorAll(".group-header > input").forEach(n => {
+    html[0].querySelectorAll("[data-focus='focus']").forEach(n => {
       n.addEventListener("focus", this._onFocusName.bind(this));
     });
   }
@@ -107,7 +111,7 @@ export class GroupConfig extends FormApplication {
     div.classList.add("group");
     div.innerHTML = await renderTemplate("modules/rollgroups/templates/column.hbs", group[0]);
     div.querySelector("[data-action='delete']").addEventListener("click", this._onClickDelete.bind(this));
-    div.querySelector(".group-header > input").addEventListener("focus", this._onFocusName.bind(this));
+    div.querySelector("[data-focus='focus']").addEventListener("focus", this._onFocusName.bind(this));
     event.currentTarget.closest(".inputs").appendChild(div);
     this._refreshVersatileOptions();
   }
@@ -120,7 +124,7 @@ export class GroupConfig extends FormApplication {
     if (!vers) return;
     const selectedIndex = vers.selectedIndex;
     const ph = game.i18n.localize("ROLLGROUPS.GroupPlaceholder");
-    const headers = this.element[0].querySelectorAll(".group-header > input");
+    const headers = this.element[0].querySelectorAll("[data-focus='focus']");
     vers.innerHTML = Array.from(headers).reduce((acc, group, idx) => {
       const label = group.value || ph;
       const value = idx;

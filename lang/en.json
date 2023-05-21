@@ -16,6 +16,7 @@
   "ROLLGROUPS.OpenConfig": "Open the Roll Group configuration menu",
   "ROLLGROUPS.PickWeapon": "Pick Weapon: {name}",
   "ROLLGROUPS.RollGroupEmpty": "The roll group contains no formulas.",
+  "ROLLGROUPS.RollGroupIdx": "Group {idx}",
   "ROLLGROUPS.Versatile": "Versatile",
   "ROLLGROUPS.VersatileGroup": "Versatile Group:",
   "ROLLGROUPS.VersatileTooltip": "The roll group that the 'Versatile' button will roll. The first formula in the group will be replaced by the Versatile formula.",
