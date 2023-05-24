@@ -1,0 +1,11 @@
+<div class="header">
+  <input type="text" data-focus="focus" value="{{label}}" placeholder="{{localize 'ROLLGROUPS.GroupPlaceholder'}}">
+</div>
+{{#each rows}}
+<div class="row">
+  <input type="checkbox" {{checked checked}}>
+</div>
+{{/each}}
+<a data-action="delete">
+  <i class="fa-solid fa-trash"></i>
+</a>

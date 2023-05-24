@@ -1,16 +1,17 @@
 <form class="rollgroups">
   <div class="inputs">
     <div class="legend">
-      <div class="damage-header">{{localize "ROLLGROUPS.CONFIG.FORMULA"}}</div>
-      {{#each parts as |part|}}
-      <div class="damage-row" data-tooltip="{{label}}">{{label}}</div>
+      <div class="header">{{localize "ROLLGROUPS.Formula"}}</div>
+      {{#each parts}}
+      <div class="row" data-tooltip="{{label}}">{{label}}</div>
       {{/each}}
-      <a data-action="add"><i class="fa-solid fa-plus"></i></a>
+      <a data-action="add">
+        <i class="fa-solid fa-plus"></i>
+      </a>
     </div>
-    {{#each groups as |group|}}
+    {{#each groups}}
     <div class="group">
-      {{{group}}}
-      <a data-action="delete"><i class="fa-solid fa-trash"></i></a>
+      {{> "modules/rollgroups/templates/column.hbs"}}
     </div>
     {{/each}}
   </div>
@@ -18,13 +19,23 @@
   <div class="form-group">
     <label data-tooltip="ROLLGROUPS.VersatileTooltip">{{localize "ROLLGROUPS.VersatileGroup"}}</label>
     <div class="form-fields">
-      <select name="versatile">
+      <select name="versatile" data-dtype="Number">
         {{selectOptions choices selected=selected labelAttr="label" nameAttr="value" blank=""}}
       </select>
     </div>
   </div>
   {{/if}}
+  {{#if eligibleBladeCantrip}}
+  <div class="form-group">
+    <label data-tooltip="ROLLGROUPS.BladeCantripTooltip">{{localize "ROLLGROUPS.BladeCantrip"}}</label>
+    <div class="form-fields">
+      <input type="checkbox" name="bladeCantrip" {{checked isBladeCantrip}}>
+    </div>
+  </div>
+  {{/if}}
   <div class="footer">
-    <button name="submit"><i class="fa-solid fa-save"></i> {{localize "Save"}}</button>
+    <button name="submit">
+      <i class="fa-solid fa-save"></i> {{localize "Save"}}
+    </button>
   </div>
 </form>

@@ -1,54 +1,87 @@
 import {MODULE} from "./_constants.mjs";
 
-export function createDamageButtons(item, data) {
+/**
+ * Create the damage buttons on a chat card when an item is used.
+ * Hooks on 'preDisplayCard'.
+ * @param {Item} item       The item being displayed.
+ * @param {object} data     The data object of the message to be created.
+ */
+export function manageCardButtons(item, data) {
   const el = document.createElement("DIV");
   el.innerHTML = data.content;
-  const select = ".card-buttons button[data-action='damage']";
-  const damageButton = el.querySelector(select);
+  const damageButton = el.querySelector(".card-buttons button[data-action='damage']");
   if (!damageButton) return;
+  const config = item.flags[MODULE]?.config ?? {};
 
-  const {groups, versatile} = item.flags[MODULE]?.config ?? {};
-  if (!groups) return;
+  const buttons = createDamageButtons(item);
+  if (buttons) {
+    const div = document.createElement("DIV");
+    div.innerHTML = buttons;
+    damageButton.after(...div.children);
+    damageButton.remove();
+  }
 
+  // Adjust the 'Versatile' button.
+  if (buttons && Number.isNumeric(config.versatile) && item.isVersatile) {
+    const vers = el.querySelector("[data-action='versatile']");
+    vers.setAttribute("data-action", "rollgroup-damage-versatile");
+    vers.setAttribute("data-group", config.versatile);
+    vers.setAttribute("data-item-uuid", item.uuid);
+    vers.setAttribute("data-actor-uuid", item.actor.uuid);
+  }
+
+  // Create Blade Cantrip buttons if eligible and is enabled.
+  if (config.bladeCantrip && (item.type === "spell") && (item.system.level === 0) && item.hasDamage) {
+    const div = document.createElement("DIV");
+    div.innerHTML = `
+    <hr>
+    <button data-action="rollgroup-bladecantrip-attack" data-actor-uuid="${item.actor.uuid}">
+      ${game.i18n.localize("ROLLGROUPS.BladeCantripAttack")}
+    </button>
+    <button data-action="rollgroup-bladecantrip-damage" data-actor-uuid="${item.actor.uuid}">
+      ${game.i18n.localize("ROLLGROUPS.BladeCantripDamage")}
+    </button>`;
+    el.querySelector(".card-buttons").append(...div.children);
+  }
+
+  data.content = el.innerHTML;
+}
+
+/**
+ * Helper function to construct the html for the damage buttons. This function does not
+ * mutate item data, cards, or anything else.
+ * @param {Item} item         The item to retrieve data from.
+ * @returns {string|null}     The constructed buttons, as a string, or null if there are no buttons to be made.
+ */
+export function createDamageButtons(item) {
+  const config = item.flags[MODULE]?.config ?? {};
   const validParts = item.system.damage.parts.filter(([f]) => !!f);
-  if (!groups.length || validParts.length < 2) return;
+
+  const hasGroups = config.groups?.length && (validParts.length > 1);
+  if (!hasGroups) return null;
 
   // various labels.
-  const damageLabel = game.i18n.localize("ROLLGROUPS.LABELS.DAMAGE");
-  const healingLabel = game.i18n.localize("ROLLGROUPS.LABELS.HEALING");
-  const mixedLabel = game.i18n.localize("ROLLGROUPS.LABELS.MIXED");
+  const damageLabel = game.i18n.localize("ROLLGROUPS.Damage");
+  const healingLabel = game.i18n.localize("ROLLGROUPS.Healing");
+  const mixedLabel = game.i18n.localize("ROLLGROUPS.Mixed");
 
   // the button html.
-  const group = groups.reduce((acc, {label, parts}) => {
-    const r = "rollgroup-damage";
-    const p = parts.join(";");
-    const u = item.uuid;
-    const a = item.actor.uuid;
+  const group = config.groups.reduce((acc, {label, parts}, idx) => {
+    const btn = document.createElement("BUTTON");
+    btn.setAttribute("data-action", "rollgroup-damage");
+    btn.setAttribute("data-group", idx);
+    btn.setAttribute("data-item-uuid", item.uuid);
+    btn.setAttribute("data-actor-uuid", item.actor.uuid);
+
     const types = parts.map(t => validParts[t][1]);
     const isDamage = types.every(t => t in CONFIG[game.system.id.toUpperCase()].damageTypes);
     const isHealing = types.every(t => t in CONFIG[game.system.id.toUpperCase()].healingTypes);
     const lab = isDamage ? damageLabel : isHealing ? healingLabel : mixedLabel;
-    const l = `${lab} (${label})`;
-    return acc + `<button data-action="${r}" data-group-parts="${p}" data-item-uuid="${u}" data-actor-uuid="${a}">${l}</button>`;
-  }, "");
+    btn.innerHTML = `${lab} (${label})`;
 
-  // Replace the damage button(s).
-  const dmg = document.createElement("DIV");
-  dmg.innerHTML = group;
-  damageButton.after(...dmg.children);
-  damageButton.remove();
+    acc.appendChild(btn);
+    return acc;
+  }, document.createElement("DIV"));
 
-  // Adjust the 'Versatile' button.
-  if (Number.isNumeric(versatile) && item.isVersatile) {
-    const parts = groups[versatile]?.parts.join(";");
-    if (parts) {
-      const vers = el.querySelector("[data-action='versatile']");
-      vers.setAttribute("data-action", "rollgroup-versatile");
-      vers.setAttribute("data-group-parts", parts);
-      vers.setAttribute("data-item-uuid", item.uuid);
-      vers.setAttribute("data-actor-uuid", item.actor.uuid);
-    }
-  }
-
-  data.content = el.innerHTML;
+  return group.innerHTML;
 }

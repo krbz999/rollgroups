@@ -1,24 +1,24 @@
 {
-  "ROLLGROUPS": {
-    "VersatileGroup": "Versatile Group:",
-    "VersatileTooltip": "The roll group that the 'Versatile' button will roll. The first formula in the group will be replaced by the Versatile formula.",
-    "WARN": {
-      "NO_FORMULAS": "The roll group contains no formulas.",
-      "NO_ACTOR": "The owner of this item no longer exists.",
-      "NO_GROUPS": "This item has no roll groups."
-    },
-    "CONFIG": {
-      "FORMULA": "Formula",
-      "DAMAGE": "Damage",
-      "PLACEHOLDER": "Group name",
-      "BUTTON": "Group Config",
-      "TITLE": "Open the Roll Group configuration menu",
-      "GROUP_CONFIG": "Group Config: {name}"
-    },
-    "LABELS": {
-      "DAMAGE": "Damage",
-      "HEALING": "Healing",
-      "MIXED": "Mixed"
-    }
-  }
+  "ROLLGROUPS.Attack": "Attack",
+  "ROLLGROUPS.BladeCantrip": "Is Blade Cantrip?",
+  "ROLLGROUPS.BladeCantripAttack": "Weapon Attack",
+  "ROLLGROUPS.BladeCantripDamage": "Combined Damage",
+  "ROLLGROUPS.BladeCantripTooltip": "Is this a cantrip like 'Booming Blade' or 'Green-Flame Blade'?",
+  "ROLLGROUPS.Damage": "Damage",
+  "ROLLGROUPS.Formula": "Formula",
+  "ROLLGROUPS.GroupConfig": "Group Config",
+  "ROLLGROUPS.GroupConfigName": "Group Config: {name}",
+  "ROLLGROUPS.GroupPlaceholder": "Group name",
+  "ROLLGROUPS.Healing": "Healing",
+  "ROLLGROUPS.ItemOwnerMissing": "The owner of this item no longer exists.",
+  "ROLLGROUPS.Mixed": "Mixed",
+  "ROLLGROUPS.NoEquippedWeapons": "The actor '{actor}' has no melee weapon equipped.",
+  "ROLLGROUPS.OpenConfig": "Open the Roll Group configuration menu",
+  "ROLLGROUPS.PickWeapon": "Pick Weapon: {name}",
+  "ROLLGROUPS.RollGroupEmpty": "The roll group contains no formulas.",
+  "ROLLGROUPS.RollGroupIdx": "Group {idx}",
+  "ROLLGROUPS.Versatile": "Versatile",
+  "ROLLGROUPS.VersatileGroup": "Versatile Group:",
+  "ROLLGROUPS.VersatileTooltip": "The roll group that the 'Versatile' button will roll. The first formula in the group will be replaced by the Versatile formula.",
+  "ROLLGROUPS.Weapon": "Weapon"
 }

@@ -1,22 +1,12 @@
 {
-  "ROLLGROUPS": {
-    "WARN": {
-      "NO_FORMULAS": "Die Würfelgruppe enthält keine Formeln.",
-      "NO_ACTOR": "Der Besitzer dieses Items existiert nicht mehr.",
-      "NO_GROUPS": "Dieses Item hat keine Würfelgruppen."
-    },
-    "CONFIG": {
-      "FORMULA": "Formel",
-      "DAMAGE": "Schaden",
-      "PLACEHOLDER": "Gruppenname",
-      "BUTTON": "Gruppenkonfiguration",
-      "TITLE": "Öffnet Würfelgruppen-Konfiguration",
-      "GROUP_CONFIG": "Würfelgruppe: {name}"
-    },
-    "LABELS": {
-      "DAMAGE": "Schaden",
-      "HEALING": "Heilung",
-      "MIXED": "Gemischt"
-    }
-  }
+  "ROLLGROUPS.Damage": "Schaden",
+  "ROLLGROUPS.Formula": "Formel",
+  "ROLLGROUPS.GroupConfig": "Gruppenkonfiguration",
+  "ROLLGROUPS.GroupConfigName": "Würfelgruppe: {name}",
+  "ROLLGROUPS.GroupPlaceholder": "Gruppenname",
+  "ROLLGROUPS.Healing": "Heilung",
+  "ROLLGROUPS.ItemOwnerMissing": "Der Besitzer dieses Items existiert nicht mehr.",
+  "ROLLGROUPS.Mixed": "Gemischt",
+  "ROLLGROUPS.OpenConfig": "Öffnet Würfelgruppen-Konfiguration",
+  "ROLLGROUPS.RollGroupEmpty": "Die Würfelgruppe enthält keine Formeln."
 }

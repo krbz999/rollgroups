@@ -1,39 +1,32 @@
 /* GROUP CONFIG */
-.app.window-app.rollgroups {
+.rollgroups.group-config {
   width: auto !important;
   height: auto !important;
+  min-width: 300px !important;
 }
 
-form.rollgroups,
-form.rollgroups .inputs * {
-  flex-direction: column;
-}
-
-form.rollgroups .group {
+.rollgroups.group-config .group {
   min-width: 100px;
   max-width: 100px;
 }
 
-form.rollgroups .legend {
+.rollgroups.group-config .legend {
   min-width: 100px;
   max-width: 200px;
 }
 
-form.rollgroups .inputs {
+.rollgroups.group-config .inputs {
   display: flex;
 }
 
-form.rollgroups .inputs > * > :first-child {
-  background-color: darkgray;
-}
-
-.rollgroups .inputs > * > :last-child {
+.rollgroups.group-config [data-action] {
   border-top: 1px gray groove;
-  margin: 6px 0 10px 0;
-  width: 100%;
+  padding: 6px 0 10px 0;
+  display: flex;
+  justify-content: center;
 }
 
-form.rollgroups > .inputs > * > * {
+.rollgroups.group-config :is(.header, .row) {
   min-height: 35px;
   max-height: 35px;
   display: flex;
@@ -44,47 +37,80 @@ form.rollgroups > .inputs > * > * {
   white-space: nowrap;
 }
 
-form.rollgroups .group:last-child > :first-child {
-  border-radius: 0 10px 10px 0;
-}
-
-form.rollgroups .group-row input[type="checkbox"]:focus {
+.rollgroups.group-config [type="checkbox"]:focus {
   outline: auto;
 }
 
-form.rollgroups .group-header input::placeholder {
-  color: dimgray;
-  font-style: italic;
-}
-
-form.rollgroups .group-header input {
+.rollgroups.group-config [type="text"] {
   border-radius: 8px;
   background-color: lightgray;
 }
 
-form.rollgroups .group-header {
-  border-radius: 1px;
+.rollgroups.group-config [type="text"]::placeholder {
+  color: dimgray;
+  font-style: italic;
+}
+
+.rollgroups.group-config .header {
   padding: 2px 4px;
   border-top: groove;
   border-bottom: groove;
+  background-color: darkgray;
 }
 
-form.rollgroups .damage-header {
-  border-radius: 10px 0 0 10px;
+.rollgroups.group-config .legend .header {
   border-left: groove;
   font-weight: bold;
-  border-top: groove;
-  border-bottom: groove;
+}
+
+.rollgroups.group-config .group:last-child .header {
+  border-right: groove;
 }
 
 /* CONFIG BUTTON */
-h4.damage-header a.rollgroups.config-button {
+.rollgroups.config-button {
+  flex: 0 0 18px;
+  line-height: 24px;
+  float: right;
+  text-align: right;
+  color: #7a7971;
+}
+
+/* WEAPON PICKER */
+.rollgroups.weapon-picker {
+  max-width: 500px !important;
+  width: auto !important;
+  height: auto !important;
+}
+
+.rollgroups.weapon-picker .weapons {
+  height: auto;
+  overflow: auto;
+  display: flex;
+  max-width: 100%;
+  gap: 5px;
+  scroll-behavior: smooth;
+}
+
+.rollgroups.weapon-picker .weapon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 150px;
+  margin-bottom: 5px;
+}
+
+.rollgroups.weapon-picker .weapon img {
+  max-height: 150px;
+  max-width: 150px;
+}
+
+.rollgroups.weapon-picker button {
   font-size: 12px;
-  border: 2px groove #eeede0;
+  height: 24px;
+  line-height: 20px;
+  margin: 2px 0;
   background: rgba(0, 0, 0, 0.1);
-  padding: 2px 10px 2px 5px;
-  min-width: fit-content;
-  border-radius: 4px;
-  margin-left: 5px;
-  color: black;
+  border: 2px groove #eeede0;
+  width: 95%;
 }
