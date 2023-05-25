@@ -8,10 +8,12 @@ export class WeaponPicker extends Application {
    */
   constructor(event) {
     super();
-    this.actor = fromUuidSync(event.currentTarget.dataset.actorUuid);
-    this.cantrip = this.actor.items.get(event.currentTarget.closest("[data-item-id]").dataset.itemId);
+    const target = event.currentTarget;
+    this.actor = fromUuidSync(target.dataset.actorUuid);
+    const isNPC = this.actor.type === "npc";
+    this.cantrip = this.actor.items.get(target.closest("[data-item-id]").dataset.itemId);
     this.equippedWeapons = this.actor.items.filter(item => {
-      return (item.type === "weapon") && item.system.equipped && item.hasAttack && item.hasDamage;
+      return (item.type === "weapon") && (isNPC || item.system.equipped) && item.hasAttack && item.hasDamage;
     });
   }
 
@@ -106,9 +108,9 @@ export class WeaponPicker extends Application {
    */
   _scaleCantripDamage() {
     const part = this.cantrip.system.damage.parts[0];
-    const level = this.actor.system.details.level ?? Math.floor(this.actor.system.details.cr);
+    const level = this.actor.system.details.level ?? this.actor.system.details.spellLevel;
     const add = Math.floor((level + 1) / 6);
-    const formula = new Roll(part[0]).alter(0, add).formula;
+    const formula = new Roll(part[0]).alter(1, add).formula;
     return [`${formula}[${part[1]}]`];
   }
 }
