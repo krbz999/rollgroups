@@ -1,4 +1,9 @@
 {
+  "ROLLGROUPS.Attack": "Angriff",
+  "ROLLGROUPS.BladeCantrip": "Klingen-Zaubertrick?",
+  "ROLLGROUPS.BladeCantripAttack": "Waffenangriff",
+  "ROLLGROUPS.BladeCantripDamage": "Gesamtschaden",
+  "ROLLGROUPS.BladeCantripTooltip": "Ist dies ein Zaubertrick wie 'Dröhnende Klinge' oder 'Grünfeuerklinge'?",
   "ROLLGROUPS.Damage": "Schaden",
   "ROLLGROUPS.Formula": "Formel",
   "ROLLGROUPS.GroupConfig": "Gruppenkonfiguration",
@@ -7,6 +12,13 @@
   "ROLLGROUPS.Healing": "Heilung",
   "ROLLGROUPS.ItemOwnerMissing": "Der Besitzer dieses Items existiert nicht mehr.",
   "ROLLGROUPS.Mixed": "Gemischt",
+  "ROLLGROUPS.NoEquippedWeapons": "Akteur '{actor}' hat keine Nahkampfwaffe ausgerüstet.",
   "ROLLGROUPS.OpenConfig": "Öffnet Würfelgruppen-Konfiguration",
+  "ROLLGROUPS.PickWeapon": "Waffe wählen: {name}",
   "ROLLGROUPS.RollGroupEmpty": "Die Würfelgruppe enthält keine Formeln."
+  "ROLLGROUPS.RollGroupIdx": "Gruppe {idx}",
+  "ROLLGROUPS.Versatile": "Vielseitig",
+  "ROLLGROUPS.VersatileGroup": "Vielseitig-Gruppe:",
+  "ROLLGROUPS.VersatileTooltip": "Die Würfelgruppe, die der 'Vielseitig'-Button würfelt. Die erste Formel in der Gruppe wird durch die Vielseitig-Formel ersetzt.",
+  "ROLLGROUPS.Weapon": "Waffe"
 }
