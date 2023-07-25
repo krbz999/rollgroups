@@ -1,7 +1,7 @@
 {
   "id": "rollgroups",
   "title": "Roll Groups",
-  "version": "11.0.1",
+  "version": "11.0.2",
   "authors": [
     {
       "name": "Zhell",
@@ -28,7 +28,8 @@
         "type": "system",
         "manifest": "https://raw.githubusercontent.com/foundryvtt/dnd5e/master/system.json",
         "compatibility": {
-          "minimum": "2.2.0"
+          "minimum": "2.2.0",
+          "maximum": "2.2.9"
         }
       },
       {
@@ -59,5 +60,5 @@
   "url": "https://github.com/krbz999/rollgroups",
   "license": "https://raw.githubusercontent.com/krbz999/babonus/main/LICENSE",
   "manifest": "https://github.com/krbz999/rollgroups/releases/latest/download/module.json",
-  "download": "https://github.com/krbz999/rollgroups/releases/download/v11.0.1/module.zip"
+  "download": "https://github.com/krbz999/rollgroups/releases/download/v11.0.2/module.zip"
 }

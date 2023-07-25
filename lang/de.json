@@ -15,7 +15,7 @@
   "ROLLGROUPS.NoEquippedWeapons": "Akteur '{actor}' hat keine Nahkampfwaffe ausgerüstet.",
   "ROLLGROUPS.OpenConfig": "Öffnet Würfelgruppen-Konfiguration",
   "ROLLGROUPS.PickWeapon": "Waffe wählen: {name}",
-  "ROLLGROUPS.RollGroupEmpty": "Die Würfelgruppe enthält keine Formeln."
+  "ROLLGROUPS.RollGroupEmpty": "Die Würfelgruppe enthält keine Formeln.",
   "ROLLGROUPS.RollGroupIdx": "Gruppe {idx}",
   "ROLLGROUPS.Versatile": "Vielseitig",
   "ROLLGROUPS.VersatileGroup": "Vielseitig-Gruppe:",
