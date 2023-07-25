@@ -11,7 +11,7 @@ jobs:
       - uses: actions/checkout@v2
       
       # Create zip file
-      - run: zip -r ./module.zip module.json LICENSE scripts/ lang/ styles/ templates/
+      - run: zip -r ./module.zip setup.mjs module.json LICENSE scripts/ lang/ styles/ templates/
       
       # Create a release for this specific version.
       - name: Update Release with Files
