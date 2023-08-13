@@ -10,38 +10,39 @@ export function manageCardButtons(item, data) {
   const el = document.createElement("DIV");
   el.innerHTML = data.content;
   const damageButton = el.querySelector(".card-buttons button[data-action='damage']");
-  if (!damageButton) return;
   const config = item.flags[MODULE]?.config ?? {};
 
-  const buttons = createDamageButtons(item);
-  if (buttons) {
-    const div = document.createElement("DIV");
-    div.innerHTML = buttons;
-    damageButton.after(...div.children);
-    damageButton.remove();
-  }
+  if (damageButton) {
+    const buttons = createDamageButtons(item);
+    if (buttons) {
+      const div = document.createElement("DIV");
+      div.innerHTML = buttons;
+      damageButton.after(...div.children);
+      damageButton.remove();
+    }
 
-  // Adjust the 'Versatile' button.
-  if (buttons && Number.isNumeric(config.versatile) && item.isVersatile) {
-    const vers = el.querySelector("[data-action='versatile']");
-    vers.setAttribute("data-action", "rollgroup-damage-versatile");
-    vers.setAttribute("data-group", config.versatile);
-    vers.setAttribute("data-item-uuid", item.uuid);
-    vers.setAttribute("data-actor-uuid", item.actor.uuid);
-  }
+    // Adjust the 'Versatile' button.
+    if (buttons && Number.isNumeric(config.versatile) && item.isVersatile) {
+      const vers = el.querySelector("[data-action='versatile']");
+      vers.setAttribute("data-action", "rollgroup-damage-versatile");
+      vers.setAttribute("data-group", config.versatile);
+      vers.setAttribute("data-item-uuid", item.uuid);
+      vers.setAttribute("data-actor-uuid", item.actor.uuid);
+    }
 
-  // Create Blade Cantrip buttons if eligible and is enabled.
-  if (config.bladeCantrip && (item.type === "spell") && (item.system.level === 0) && item.hasDamage) {
-    const div = document.createElement("DIV");
-    div.innerHTML = `
-    <hr>
-    <button data-action="rollgroup-bladecantrip-attack" data-actor-uuid="${item.actor.uuid}">
-      ${game.i18n.localize("ROLLGROUPS.BladeCantripAttack")}
-    </button>
-    <button data-action="rollgroup-bladecantrip-damage" data-actor-uuid="${item.actor.uuid}">
-      ${game.i18n.localize("ROLLGROUPS.BladeCantripDamage")}
-    </button>`;
-    el.querySelector(".card-buttons").append(...div.children);
+    // Create Blade Cantrip buttons if eligible and is enabled.
+    if (config.bladeCantrip && (item.type === "spell") && (item.system.level === 0) && item.hasDamage) {
+      const div = document.createElement("DIV");
+      div.innerHTML = `
+      <hr>
+      <button data-action="rollgroup-bladecantrip-attack" data-actor-uuid="${item.actor.uuid}">
+        ${game.i18n.localize("ROLLGROUPS.BladeCantripAttack")}
+      </button>
+      <button data-action="rollgroup-bladecantrip-damage" data-actor-uuid="${item.actor.uuid}">
+        ${game.i18n.localize("ROLLGROUPS.BladeCantripDamage")}
+      </button>`;
+      el.querySelector(".card-buttons").append(...div.children);
+    }
   }
 
   // Add more saving throw buttons.
