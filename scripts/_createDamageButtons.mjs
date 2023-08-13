@@ -44,6 +44,17 @@ export function manageCardButtons(item, data) {
     el.querySelector(".card-buttons").append(...div.children);
   }
 
+  // Add more saving throw buttons.
+  const saveButtons = createSaveButtons(item);
+  if (saveButtons) {
+    const save = el.querySelector("button[data-action=save]");
+    if (save) {
+      const div = document.createElement("DIV");
+      div.innerHTML = saveButtons;
+      save.after(...div.children);
+    }
+  }
+
   data.content = el.innerHTML;
 }
 
@@ -84,4 +95,30 @@ export function createDamageButtons(item) {
   }, document.createElement("DIV"));
 
   return group.innerHTML;
+}
+
+/**
+ * Helper function to construct the html for saving throw buttons.
+ * @param {Item} item
+ * @returns {string|null}
+ */
+export function createSaveButtons(item) {
+  if (!item.hasSave) return null;
+  const system = game.system.id.toUpperCase();
+  const saves = (item.flags[MODULE]?.config?.saves ?? []).filter(abi => {
+    return (abi !== item.system.save.ability) && (abi in CONFIG[system].abilities);
+  });
+  if (!saves.length) return null;
+
+  const div = document.createElement("DIV");
+  for (const abi of saves) {
+    const btn = document.createElement("BUTTON");
+    btn.setAttribute("data-action", "save");
+    btn.setAttribute("data-ability", abi);
+    const dc = item.getSaveDC();
+    const ability = CONFIG[system].abilities[abi].label;
+    btn.innerHTML = `${game.i18n.localize(`${system}.SavingThrow`)} ${game.i18n.format(`${system}.SaveDC`, {dc, ability})}`;
+    div.appendChild(btn);
+  }
+  return div.innerHTML;
 }

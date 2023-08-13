@@ -20,7 +20,7 @@ export class GroupConfig extends FormApplication {
 
   /** @override */
   get id() {
-    return `${MODULE}-groupconfig-${this.item.id}`;
+    return `${MODULE}-groupconfig-${this.item.uuid.replaceAll(".", "-")}`;
   }
 
   /** @override */

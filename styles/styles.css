@@ -67,13 +67,23 @@
   border-right: groove;
 }
 
+/* SAVE CONFIG */
+.rollgroups.save-config {
+  width: 300px;
+}
+
 /* CONFIG BUTTON */
 .rollgroups.config-button {
-  flex: 0 0 18px;
-  line-height: 24px;
   float: right;
-  text-align: right;
   color: #7a7971;
+}
+
+/* SAVE CONFIG BUTTON */
+form .form-group .form-fields a.rollgroups.save-config-button {
+  flex: 0 0 18px;
+  float: right;
+  color: #7a7971;
+  text-align: right;
 }
 
 /* WEAPON PICKER */
