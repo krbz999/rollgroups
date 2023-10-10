@@ -20,8 +20,8 @@ export function createChatLogListeners(message, html) {
 
 /**
  * Make a damage roll using one of the buttons created in the chatlog.
- * @param {PointerEvent} event      The initiating click event.
- * @returns // see Item#rollDamage.
+ * @param {PointerEvent} event              The initiating click event.
+ * @returns {Promise<DamageRoll|void>}      The damage roll.
  */
 function rollDamageFromChat(event) {
   const item = findItem(event);
@@ -37,10 +37,13 @@ function rollDamageFromChat(event) {
 
   // Additional configurations for the damage roll.
   const spellLevel = event.currentTarget.closest("[data-spell-level]")?.dataset.spellLevel;
-  const versatile = event.currentTarget.dataset.action.endsWith("versatile");
 
   // Return the damage roll.
-  return clone.rollDamage({event, spellLevel, versatile});
+  return clone.rollDamage({
+    event: event,
+    spellLevel: Number.isNumeric(spellLevel) ? Number(spellLevel) : item.system.level,
+    versatile: event.currentTarget.dataset.action.endsWith("versatile")
+  });
 }
 
 /**
@@ -79,7 +82,7 @@ export async function rollDamageGroup({
  * Construct a clone of an item using a subset of its damage parts.
  * @param {Item} item         The original item.
  * @param {array[]} parts     The damage parts to use.
- * @returns  {Item}           The clone of the item.
+ * @returns {Item}            The clone of the item.
  */
 function constructClone(item, parts) {
   const clone = item.clone({"system.damage.parts": parts}, {keepId: true});
