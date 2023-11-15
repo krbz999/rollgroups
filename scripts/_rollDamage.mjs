@@ -86,10 +86,6 @@ export async function rollDamageGroup({
  */
 function constructClone(item, parts) {
   const clone = item.clone({"system.damage.parts": parts}, {keepId: true});
-  if (item._ammo) {
-    clone._ammo = item._ammo;
-    delete item._ammo;
-  }
   return clone;
 }
 
