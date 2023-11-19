@@ -1,11 +1,11 @@
 <div class="header">
-  <input type="text" data-focus="focus" value="{{label}}" placeholder="{{localize 'ROLLGROUPS.GroupPlaceholder'}}">
+  <input type="text" class="focus" name="flags.rollgroups.config.groups.{{cidx}}.label" value="{{group.label}}" placeholder="{{localize 'ROLLGROUPS.GroupPlaceholder'}}">
 </div>
-{{#each rows}}
+{{#each group.rows as |row idx|}}
 <div class="row">
-  <input type="checkbox" {{checked checked}}>
+  <input type="checkbox" name="flags.rollgroups.config.groups.{{../cidx}}.parts" value="{{idx}}" {{checked row.checked}}>
 </div>
 {{/each}}
-<a data-action="delete">
+<a data-action="delete" data-idx="{{cidx}}">
   <i class="fa-solid fa-trash"></i>
 </a>

@@ -1,5 +1,5 @@
 import {MODULE} from "./_constants.mjs";
-import {createDamageButtons} from "./_createDamageButtons.mjs";
+import {createDamageButtons} from "./_create-buttons.mjs";
 
 export class WeaponPicker extends Application {
   /**
@@ -21,7 +21,9 @@ export class WeaponPicker extends Application {
   static get defaultOptions() {
     return foundry.utils.mergeObject(super.defaultOptions, {
       template: `modules/${MODULE}/templates/weapon_picker.hbs`,
-      classes: [MODULE, "weapon-picker"]
+      classes: [MODULE, "weapon-picker"],
+      height: "auto",
+      wdith: "auto"
     });
   }
 
@@ -55,7 +57,7 @@ export class WeaponPicker extends Application {
   /**
    * Handle quick-rolling by clicking a weapon's image.
    * @param {PointerEvent} event      The initiating click event.
-   * @returns // See Item#rollAttack or Item#rollDamage.
+   * @returns {Promise<D20Roll>}
    */
   async _onQuickRoll(event) {
     const weapon = this.actor.items.get(event.currentTarget.closest("[data-item-id]").dataset.itemId);
@@ -77,7 +79,7 @@ export class WeaponPicker extends Application {
   /**
    * Handle rolling an attack roll with a given weapon.
    * @param {PointerEvent} event      The initiating click event.
-   * @returns // See Item#rollAttack.
+   * @returns {Promise<D20Roll>}
    */
   async _onClickAttack(event) {
     return this.actor.items.get(event.currentTarget.closest("[data-item-id]").dataset.itemId).rollAttack({event});
@@ -86,7 +88,7 @@ export class WeaponPicker extends Application {
   /**
    * Handle rolling a damage roll with a given weapon.
    * @param {PointerEvent} event      The initiating click event.
-   * @returns // See Item#rollDamage.
+   * @returns {Promise<DamageRoll>}
    */
   async _onClickDamage(event) {
     const weapon = this.actor.items.get(event.currentTarget.closest("[data-item-id]").dataset.itemId);

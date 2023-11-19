@@ -1,6 +1,6 @@
 import {MODULE} from "./_constants.mjs";
-import {createDamageButtons} from "./_createDamageButtons.mjs";
-import {WeaponPicker} from "./weaponPicker.mjs";
+import {createDamageButtons} from "./_create-buttons.mjs";
+import {WeaponPicker} from "./weapon-picker.mjs";
 
 /**
  * Create the listener for each rollgroups button in a chat message.

@@ -14,6 +14,7 @@
   "ROLLGROUPS.Mixed": "Mixed",
   "ROLLGROUPS.NoEquippedWeapons": "The actor '{actor}' has no melee weapon equipped.",
   "ROLLGROUPS.OpenConfig": "Open the Roll Group configuration menu",
+  "ROLLGROUPS.OpenSaveConfig": "Open the Saving Throw configuration menu",
   "ROLLGROUPS.PickWeapon": "Pick Weapon: {name}",
   "ROLLGROUPS.RollGroupEmpty": "The roll group contains no formulas.",
   "ROLLGROUPS.RollGroupIdx": "Group {idx}",

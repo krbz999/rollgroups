@@ -1,31 +1,22 @@
 /* GROUP CONFIG */
-.rollgroups.group-config {
-  width: auto !important;
-  height: auto !important;
-  min-width: 300px !important;
-}
-
+.rollgroups.group-config {}
 .rollgroups.group-config .group {
   min-width: 100px;
   max-width: 100px;
 }
-
 .rollgroups.group-config .legend {
   min-width: 100px;
   max-width: 200px;
 }
-
 .rollgroups.group-config .inputs {
   display: flex;
 }
-
 .rollgroups.group-config [data-action] {
   border-top: 1px gray groove;
   padding: 6px 0 10px 0;
   display: flex;
   justify-content: center;
 }
-
 .rollgroups.group-config :is(.header, .row) {
   min-height: 35px;
   max-height: 35px;
@@ -36,33 +27,27 @@
   overflow: hidden;
   white-space: nowrap;
 }
-
 .rollgroups.group-config [type="checkbox"]:focus {
   outline: auto;
 }
-
 .rollgroups.group-config [type="text"] {
   border-radius: 8px;
   background-color: lightgray;
 }
-
 .rollgroups.group-config [type="text"]::placeholder {
   color: dimgray;
   font-style: italic;
 }
-
 .rollgroups.group-config .header {
   padding: 2px 4px;
   border-top: groove;
   border-bottom: groove;
   background-color: darkgray;
 }
-
 .rollgroups.group-config .legend .header {
   border-left: groove;
   font-weight: bold;
 }
-
 .rollgroups.group-config .group:last-child .header {
   border-right: groove;
 }
@@ -73,26 +58,20 @@
 }
 
 /* CONFIG BUTTON */
-.rollgroups.config-button {
+.dnd5e.sheet.item h4 .rollgroups.config-button {
   float: right;
-  color: #7a7971;
+  opacity: 1;
 }
 
 /* SAVE CONFIG BUTTON */
-form .form-group .form-fields a.rollgroups.save-config-button {
+.dnd5e.sheet.item .rollgroups.save-config-button {
   flex: 0 0 18px;
-  float: right;
   color: #7a7971;
   text-align: right;
 }
 
 /* WEAPON PICKER */
-.rollgroups.weapon-picker {
-  max-width: 500px !important;
-  width: auto !important;
-  height: auto !important;
-}
-
+.rollgroups.weapon-picker {}
 .rollgroups.weapon-picker .weapons {
   height: auto;
   overflow: auto;
@@ -101,7 +80,6 @@ form .form-group .form-fields a.rollgroups.save-config-button {
   gap: 5px;
   scroll-behavior: smooth;
 }
-
 .rollgroups.weapon-picker .weapon {
   display: flex;
   flex-direction: column;
@@ -109,12 +87,10 @@ form .form-group .form-fields a.rollgroups.save-config-button {
   min-width: 150px;
   margin-bottom: 5px;
 }
-
 .rollgroups.weapon-picker .weapon img {
   max-height: 150px;
   max-width: 150px;
 }
-
 .rollgroups.weapon-picker button {
   font-size: 12px;
   height: 24px;

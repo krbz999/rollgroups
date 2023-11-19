@@ -14,7 +14,9 @@ export class SaveConfig extends FormApplication {
   static get defaultOptions() {
     return foundry.utils.mergeObject(super.defaultOptions, {
       template: `modules/${MODULE}/templates/save_config.hbs`,
-      classes: [MODULE, "save-config"]
+      classes: [MODULE, "save-config"],
+      height: "auto",
+      wdith: "auto"
     });
   }
 

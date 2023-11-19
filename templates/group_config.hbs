@@ -9,9 +9,9 @@
         <i class="fa-solid fa-plus"></i>
       </a>
     </div>
-    {{#each groups}}
+    {{#each groups as |group idx|}}
     <div class="group">
-      {{> "modules/rollgroups/templates/column.hbs"}}
+      {{> "modules/rollgroups/templates/column.hbs" group=group cidx=idx}}
     </div>
     {{/each}}
   </div>
@@ -19,8 +19,8 @@
   <div class="form-group">
     <label data-tooltip="ROLLGROUPS.VersatileTooltip">{{localize "ROLLGROUPS.VersatileGroup"}}</label>
     <div class="form-fields">
-      <select name="versatile" data-dtype="Number">
-        {{selectOptions choices selected=selected labelAttr="label" nameAttr="value" blank=""}}
+      <select name="flags.rollgroups.config.versatile" data-dtype="Number">
+        {{selectOptions choices selected=selected labelAttr="label" nameAttr="value" blank="-" localize=true}}
       </select>
     </div>
   </div>
@@ -29,7 +29,7 @@
   <div class="form-group">
     <label data-tooltip="ROLLGROUPS.BladeCantripTooltip">{{localize "ROLLGROUPS.BladeCantrip"}}</label>
     <div class="form-fields">
-      <input type="checkbox" name="bladeCantrip" {{checked isBladeCantrip}}>
+      <input type="checkbox" name="flags.rollgroups.config.bladeCantrip" {{checked isBladeCantrip}}>
     </div>
   </div>
   {{/if}}
