@@ -77,7 +77,7 @@ export class GroupConfig extends FormApplication {
 
   /** @override */
   async _updateObject(event, formData) {
-    const data = new this.model(foundry.utils.expandObject(formData).flags.rollgroups.config).toObject();
+    const data = new this.model(foundry.utils.expandObject(formData ?? {})?.flags?.rollgroups?.config ?? {}).toObject();
     for (const group of data.groups) {
       group.parts = group.parts.filter(p => p !== null);
     }
@@ -104,7 +104,7 @@ export class GroupConfig extends FormApplication {
    * @param {PointerEvent} event      The initiating click event.
    */
   async _onClickAdd(event) {
-    const groups = this.clone.flags.rollgroups.config.groups;
+    const groups = this.clone.flags.rollgroups?.config?.groups ?? [];
     this.clone.updateSource({"flags.rollgroups.config.groups": groups.concat([{label: "", parts: []}])});
     this.render();
   }
@@ -160,7 +160,7 @@ export class GroupConfig extends FormApplication {
    * @param {PointerEvent} event      The initiating click event.
    */
   _onClickDelete(event) {
-    const groups = foundry.utils.deepClone(this.clone.flags.rollgroups.config.groups);
+    const groups = foundry.utils.deepClone(this.clone.flags.rollgroups?.config?.groups ?? []);
     groups.splice(event.currentTarget.dataset.idx, 1);
     this.clone.updateSource({"flags.rollgroups.config.groups": groups});
     this.render();
