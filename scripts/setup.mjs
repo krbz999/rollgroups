@@ -1,5 +1,5 @@
-import {createChatLogListeners, rollDamageGroup, variantDamageLabels} from "./scripts/_rollDamage.mjs";
-import {manageCardButtons, createConfigButton} from "./scripts/_create-buttons.mjs";
+import {createChatLogListeners, rollDamageGroup, variantDamageLabels} from "./_rollDamage.mjs";
+import {manageCardButtons, createConfigButton} from "./_create-buttons.mjs";
 
 Hooks.once("setup", () => {
   Hooks.on(`${game.system.id}.preDisplayCard`, manageCardButtons);
