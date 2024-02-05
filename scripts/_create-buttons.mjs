@@ -116,9 +116,11 @@ export function createSaveButtons(item) {
   const div = document.createElement("DIV");
   for (const abi of saves) {
     const btn = document.createElement("BUTTON");
+    btn.setAttribute("type", "button");
     btn.setAttribute("data-action", "save");
     btn.setAttribute("data-ability", abi);
     const dc = item.getSaveDC();
+    btn.setAttribute("data-dc", dc);
     const ability = CONFIG[system].abilities[abi].label;
     btn.innerHTML = `<i class="fa-solid fa-shield-heart"></i> ${game.i18n.format(`${system}.SavingThrowDC`, {dc, ability})}`;
     div.appendChild(btn);
@@ -141,9 +143,7 @@ export function createConfigButton(sheet, html) {
       ${game.i18n.localize("ROLLGROUPS.GroupConfig")} <i class="fa-solid fa-edit"></i>
     </a>`;
     if (sheet.isEditable) {
-      div.querySelector("A").addEventListener("click", () => {
-        new GroupConfig(sheet.document).render(true);
-      });
+      div.querySelector("A").addEventListener("click", () => new GroupConfig(sheet.document).render(true));
     }
     addDamage.after(div.firstElementChild);
   }
@@ -156,9 +156,7 @@ export function createConfigButton(sheet, html) {
       <i class="fa-solid fa-plus"></i>
     </a>`;
     if (sheet.isEditable) {
-      div.querySelector("A").addEventListener("click", () => {
-        new SaveConfig(sheet.document).render(true);
-      });
+      div.querySelector("A").addEventListener("click", () => new SaveConfig(sheet.document).render(true));
     }
     saveScaling.after(div.firstElementChild);
   }
