@@ -40,8 +40,8 @@ export class GroupConfig extends FormApplication {
   }
 
   /** @override */
-  async getData() {
-    const data = await super.getData();
+  getData() {
+    const data = {};
 
     const types = foundry.utils.mergeObject(
       CONFIG[game.system.id.toUpperCase()].damageTypes,
@@ -51,14 +51,13 @@ export class GroupConfig extends FormApplication {
 
     // construct the left column of formulas.
     data.parts = this.parts.reduce((acc, [formula, type]) => {
-      let locale = types[type];
-      if (!locale) locale = game.i18n.localize("None");
+      const locale = types[type]?.label ?? game.i18n.localize("None");
       acc.push({label: `${formula} (${locale})`});
       return acc;
     }, []);
 
     // construct the group columns.
-    data.groups = this.columnHelper("data");
+    data.groups = this.columnHelper();
 
     // Values and labels for 'Versatile' select.
     data.versatile = this.item.isVersatile;
@@ -78,9 +77,7 @@ export class GroupConfig extends FormApplication {
   /** @override */
   async _updateObject(event, formData) {
     const data = new this.model(foundry.utils.expandObject(formData ?? {})?.flags?.rollgroups?.config ?? {}).toObject();
-    for (const group of data.groups) {
-      group.parts = group.parts.filter(p => p !== null);
-    }
+    for (const group of data.groups) group.parts = group.parts.filter(p => p !== null);
     data.groups = data.groups.filter(g => g.parts.length > 0);
     return this.item.setFlag(MODULE, "config", data);
   }
@@ -111,9 +108,8 @@ export class GroupConfig extends FormApplication {
 
   /** @override */
   setPosition(pos = {}) {
-    pos.width = "auto";
-    pos.height = "auto";
-    super.setPosition(pos);
+    pos.width = pos.height = "auto";
+    return super.setPosition(pos);
   }
 
   /**
@@ -122,7 +118,7 @@ export class GroupConfig extends FormApplication {
    */
   _onChangeInput(event) {
     const formData = new FormDataExtended(this.element[0].querySelector("FORM")).object;
-    const data = new this.model(foundry.utils.expandObject(formData).flags.rollgroups.config).toObject();
+    const data = new this.model(foundry.utils.expandObject(formData).flags?.rollgroups?.config ?? {}).toObject();
     for (const group of data.groups) group.parts = group.parts.filter(p => p !== null);
     this.clone.updateSource({"flags.rollgroups.config": data});
     this.render();
@@ -171,15 +167,11 @@ export class GroupConfig extends FormApplication {
    * @returns {object[]}      An array of data objects for one or more columns.
    */
   columnHelper() {
-    const length = this.parts.length;
-    // Get the columns for initial rendering when any exist. If none exist, return an empty column.
-
+    // Get the columns for initial rendering when any exist.
     const flags = this.clone.flags[MODULE]?.config?.groups ?? [];
-    return flags.map(({label, parts}) => {
-      const rows = Array.fromRange(length).map(n => {
-        return {checked: parts.includes(n)};
-      });
-      return {label, rows};
-    });
+    return flags.map(({label, parts}) => ({
+      label: label,
+      rows: Array.fromRange(this.parts.length).map(n => ({checked: parts.includes(n)}))
+    }));
   }
 }

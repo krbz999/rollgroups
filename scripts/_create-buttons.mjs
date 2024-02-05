@@ -75,7 +75,7 @@ export function createDamageButtons(item) {
   if (!hasGroups) return null;
 
   // various labels.
-  const damageLabel = game.i18n.localize("ROLLGROUPS.Damage");
+  const damageLabel = `<i class="fa-solid fa-burst"></i> ${game.i18n.localize("ROLLGROUPS.Damage")}`;
   const healingLabel = game.i18n.localize("ROLLGROUPS.Healing");
   const mixedLabel = game.i18n.localize("ROLLGROUPS.Mixed");
 
@@ -120,7 +120,7 @@ export function createSaveButtons(item) {
     btn.setAttribute("data-ability", abi);
     const dc = item.getSaveDC();
     const ability = CONFIG[system].abilities[abi].label;
-    btn.innerHTML = `${game.i18n.localize(`${system}.SavingThrow`)} ${game.i18n.format(`${system}.SaveDC`, {dc, ability})}`;
+    btn.innerHTML = `<i class="fa-solid fa-shield-heart"></i> ${game.i18n.format(`${system}.SavingThrowDC`, {dc, ability})}`;
     div.appendChild(btn);
   }
   return div.innerHTML;
