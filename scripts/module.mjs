@@ -82,11 +82,6 @@ class Module {
     const hasGroups = config.groups?.length && (validParts.length > 1);
     if (!hasGroups) return null;
 
-    // various labels.
-    const damageLabel = `<i class="fa-solid fa-burst"></i> ${game.i18n.localize("ROLLGROUPS.Damage")}`;
-    const healingLabel = game.i18n.localize("ROLLGROUPS.Healing");
-    const mixedLabel = game.i18n.localize("ROLLGROUPS.Mixed");
-
     // the button html.
     const group = config.groups.reduce((acc, {label, parts}, idx) => {
       const btn = document.createElement("BUTTON");
@@ -98,8 +93,15 @@ class Module {
       const types = parts.map(t => validParts[t][1]);
       const isDamage = types.every(t => t in CONFIG[Module.system.toUpperCase()].damageTypes);
       const isHealing = types.every(t => t in CONFIG[Module.system.toUpperCase()].healingTypes);
-      const lab = isDamage ? damageLabel : isHealing ? healingLabel : mixedLabel;
-      btn.innerHTML = `${lab} (${label})`;
+
+      const type = isDamage ? "damage" : isHealing ? "healing" : "mixed";
+      const buttonProps = {
+        damage: {i: "class='fa-solid fa-burst'", label: "Damage"},
+        healing: {i: "class='dnd5e-icon' data-src='systems/dnd5e/icons/svg/damage/healing.svg'", label: "Healing"},
+        mixed: {i: "class='fa-solid fa-burst'", label: "Mixed"}
+      }[type];
+      label = label ? `(${label})` : "";
+      btn.innerHTML = `<i ${buttonProps.i}></i> ${game.i18n.localize("ROLLGROUPS." + buttonProps.label)} ${label}`;
 
       acc.appendChild(btn);
       return acc;
