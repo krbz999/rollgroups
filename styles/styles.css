@@ -1,55 +1,66 @@
 /* GROUP CONFIG */
-.rollgroups.group-config {}
-.rollgroups.group-config .group {
-  min-width: 100px;
-  max-width: 100px;
-}
-.rollgroups.group-config .legend {
-  min-width: 100px;
-  max-width: 200px;
-}
-.rollgroups.group-config .inputs {
-  display: flex;
-}
-.rollgroups.group-config [data-action] {
-  border-top: 1px gray groove;
-  padding: 6px 0 10px 0;
-  display: flex;
-  justify-content: center;
-}
-.rollgroups.group-config :is(.header, .row) {
-  min-height: 35px;
-  max-height: 35px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  overflow: hidden;
-  white-space: nowrap;
-}
-.rollgroups.group-config [type="checkbox"]:focus {
-  outline: auto;
-}
-.rollgroups.group-config [type="text"] {
-  border-radius: 8px;
-  background-color: lightgray;
-}
-.rollgroups.group-config [type="text"]::placeholder {
-  color: dimgray;
-  font-style: italic;
-}
-.rollgroups.group-config .header {
-  padding: 2px 4px;
-  border-top: groove;
-  border-bottom: groove;
-  background-color: darkgray;
-}
-.rollgroups.group-config .legend .header {
-  border-left: groove;
-  font-weight: bold;
-}
-.rollgroups.group-config .group:last-child .header {
-  border-right: groove;
+.rollgroups.group-config {
+  .group {
+    min-width: 100px;
+    max-width: 100px;
+
+    &:last-child .header {
+      border-right: groove;
+    }
+  }
+
+  .legend {
+    min-width: 100px;
+    max-width: 200px;
+
+    .header {
+      border-left: groove;
+      font-weight: bold;
+    }
+  }
+
+  .inputs {
+    display: flex;
+  }
+
+  [data-action] {
+    border-top: 1px gray groove;
+    padding: 6px 0 10px 0;
+    display: flex;
+    justify-content: center;
+  }
+
+  .header, .row {
+    min-height: 35px;
+    max-height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  [type="checkbox"]:focus {
+    outline: auto;
+  }
+
+  [type="text"] {
+    border-radius: 8px;
+    background-color: lightgray;
+
+    &::placeholder {
+      color: dimgray;
+      font-style: italic;
+    }
+  }
+
+  .header {
+    padding: 2px 4px;
+    border-top: groove;
+    border-bottom: groove;
+    background-color: darkgray;
+  }
 }
 
 /* SAVE CONFIG */
@@ -71,32 +82,36 @@
 }
 
 /* WEAPON PICKER */
-.rollgroups.weapon-picker {}
-.rollgroups.weapon-picker .weapons {
-  height: auto;
-  overflow: auto;
-  display: flex;
-  max-width: 100%;
-  gap: 5px;
-  scroll-behavior: smooth;
-}
-.rollgroups.weapon-picker .weapon {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  min-width: 150px;
-  margin-bottom: 5px;
-}
-.rollgroups.weapon-picker .weapon img {
-  max-height: 150px;
-  max-width: 150px;
-}
-.rollgroups.weapon-picker button {
-  font-size: 12px;
-  height: 24px;
-  line-height: 20px;
-  margin: 2px 0;
-  background: rgba(0, 0, 0, 0.1);
-  border: 2px groove #eeede0;
-  width: 95%;
+.rollgroups.weapon-picker {
+  .weapons {
+    height: auto;
+    overflow: auto;
+    display: flex;
+    max-width: 100%;
+    gap: 5px;
+    scroll-behavior: smooth;
+  }
+
+  .weapon {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 150px;
+    margin-bottom: 5px;
+
+    & img {
+      max-height: 150px;
+      max-width: 150px;
+    }
+  }
+
+  & button {
+    font-size: 12px;
+    height: 24px;
+    line-height: 20px;
+    margin: 2px 0;
+    background: rgba(0, 0, 0, 0.1);
+    border: 2px groove #eeede0;
+    width: 95%;
+  }
 }
