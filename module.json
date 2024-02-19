@@ -38,9 +38,9 @@
       "flags": {}
     },
     {
-      "lang": "pt_BR",
-      "name": "Brazilian Portuguese",
-      "path": "lang/pt_BR.json",
+      "lang": "pt-BR",
+      "name": "Português (Brasil)",
+      "path": "lang/pt-BR.json",
       "flags": {}
     }
   ],
