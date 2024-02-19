@@ -36,6 +36,12 @@
       "name": "Deutsch",
       "path": "lang/de.json",
       "flags": {}
+    },
+    {
+      "lang": "pt_BR",
+      "name": "Brazilian Portuguese",
+      "path": "lang/pt_BR.json",
+      "flags": {}
     }
   ],
   "url": "https://github.com/krbz999/rollgroups",
