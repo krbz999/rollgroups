@@ -83,13 +83,24 @@
 
 /* WEAPON PICKER */
 .rollgroups.weapon-picker {
+  height: auto !important;
+  width: auto;
+  overflow: hidden;
+
+  .window-header .window-title {
+    visibility: visible;
+    color: initial;
+    font-family: Arial;
+    font-weight: bold;
+  }
+
   .weapons {
     height: auto;
     overflow: auto;
     display: flex;
     max-width: 100%;
-    gap: 5px;
     scroll-behavior: smooth;
+    justify-content: space-around;
   }
 
   .weapon {
@@ -97,21 +108,27 @@
     flex-direction: column;
     align-items: center;
     min-width: 150px;
-    margin-bottom: 5px;
+    margin: 5px;
 
     & img {
       max-height: 150px;
       max-width: 150px;
+      min-width: 150px;
+      border-radius: 10px;
     }
-  }
 
-  & button {
-    font-size: 12px;
-    height: 24px;
-    line-height: 20px;
-    margin: 2px 0;
-    background: rgba(0, 0, 0, 0.1);
-    border: 2px groove #eeede0;
-    width: 95%;
+    & i.fa-solid {
+      display: none;
+    }
+
+    & button {
+      width: 150px;
+      overflow: hidden;
+      display: flex;
+      line-height: 20px;
+      font-size: 14px;
+      margin: 2px 0;
+      height: 56px;
+    }
   }
 }

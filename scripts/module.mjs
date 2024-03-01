@@ -367,7 +367,7 @@ class Module {
 
     // Case 5: There is one weapon, and we want to roll damage, and it has only one formula.
     else {
-      return weps[0].rollDamage({event, options: {parts: picker._scaleCantripDamage()}});
+      return weps[0].rollDamage({event, options: {rollConfigs: picker._scaleCantripDamage()}});
     }
   }
 }
@@ -596,7 +596,7 @@ class SaveConfig extends FormApplication {
   }
 }
 
-class WeaponPicker extends Application {
+class WeaponPicker extends dnd5e.applications.DialogMixin(Application) {
   /**
    * @constructor
    * @param {Event} event      The initiating click event.
@@ -616,7 +616,7 @@ class WeaponPicker extends Application {
   static get defaultOptions() {
     return foundry.utils.mergeObject(super.defaultOptions, {
       template: `modules/${Module.ID}/templates/weapon_picker.hbs`,
-      classes: [Module.ID, "weapon-picker"],
+      classes: [Module.ID, "weapon-picker", "dnd5e2", "dialog"],
       height: "auto",
       wdith: "auto"
     });
@@ -647,6 +647,7 @@ class WeaponPicker extends Application {
     html[0].querySelectorAll("[data-action='roll']").forEach(n => {
       n.addEventListener("click", this._onQuickRoll.bind(this));
     });
+    html[0].querySelectorAll("button").forEach(n => n.classList.toggle("gold-button", true));
   }
 
   /**
@@ -659,7 +660,7 @@ class WeaponPicker extends Application {
     const attack = await weapon.rollAttack({event});
     if (!attack) return null;
     this.close();
-    return weapon.rollDamageGroup({options: {parts: this._scaleCantripDamage()}});
+    return weapon.rollDamageGroup({options: {rollConfigs: this._scaleCantripDamage()}});
   }
 
   /**
@@ -693,22 +694,22 @@ class WeaponPicker extends Application {
     const versatile = "versatile" in event.currentTarget.dataset; // Whether to roll versatile damage.
     const group = "group" in event.currentTarget.dataset; // Whether to roll a specific group.
 
-    const config = {event, options: {parts}, versatile};
+    const config = {event, options: {rollConfigs: parts}, versatile};
     if (versatile) config.rollgroup = weapon.flags[Module.ID]?.config?.versatile ?? 0;
     else if (group) config.rollgroup = event.currentTarget.dataset.group;
     return weapon.rollDamageGroup(config);
   }
 
   /**
-   * Get the formula to append to a damage roll from the blade cantrip.
-   * @returns {string[]}
+   * Get the roll config to append to a damage roll from the blade cantrip.
+   * @returns {object}
    */
   _scaleCantripDamage() {
     const part = this.cantrip.system.damage.parts[0];
     const level = this.actor.system.details.level ?? this.actor.system.details.spellLevel;
     const add = Math.floor((level + 1) / 6);
     const formula = new Roll(part[0]).alter(1, add).formula;
-    return [`${formula}[${part[1]}]`];
+    return {parts: [formula], type: part[1]};
   }
 }
 

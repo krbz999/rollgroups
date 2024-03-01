@@ -44,6 +44,7 @@
       "flags": {}
     }
   ],
+  "flags": {"hotReload": {"extensions": ["css"], "paths": ["styles/styles.css"]}},
   "url": "https://github.com/krbz999/rollgroups",
   "license": "https://raw.githubusercontent.com/krbz999/babonus/main/LICENSE",
   "manifest": "https://github.com/krbz999/rollgroups/releases/latest/download/module.json",
