@@ -1,0 +1,25 @@
+{
+  "name": "rollgroups",
+  "version": "1.0.0",
+  "description": "Roll Groups",
+  "scripts": {
+    "build": "rollup -c rollup.config.mjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/krbz999/rollgroups.git"
+  },
+  "keywords": [
+    "fvtt",
+    "module"
+  ],
+  "author": "Zhell",
+  "bugs": {
+    "url": "https://github.com/krbz999/rollgroups"
+  },
+  "homepage": "https://github.com/krbz999/rollgroups",
+  "devDependencies": {
+    "eslint": "^8.57.0",
+    "rollup": "^4.17.2"
+  }
+}
