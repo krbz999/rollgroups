@@ -1,0 +1,7 @@
+<fieldset>
+  <p class="hint">{{localize "ROLLGROUPS.SaveConfigDetails"}}</p>
+
+  {{#each abilities}}
+  {{formGroup field value=value disabled=disabled name=name rootId=rootId}}
+  {{/each}}
+</fieldset>

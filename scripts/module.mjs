@@ -1,3 +1,5 @@
+const {HandlebarsApplicationMixin, DocumentSheetV2} = foundry.applications.api;
+
 class Module {
   static ID = "rollgroups";
   static get system() {return game.system.id;}
@@ -166,7 +168,7 @@ class Module {
         <i class="fa-solid fa-plus"></i>
       </a>`;
       if (sheet.isEditable) {
-        div.querySelector("A").addEventListener("click", () => new SaveConfig(sheet.document).render(true));
+        div.querySelector("A").addEventListener("click", () => new SaveConfig({document: sheet.document}).render({force: true}));
       }
       saveScaling.after(div.firstElementChild);
     }
@@ -547,30 +549,42 @@ class GroupConfig extends FormApplication {
   }
 }
 
-class SaveConfig extends FormApplication {
+class SaveConfig extends HandlebarsApplicationMixin(DocumentSheetV2) {
+  constructor(options) {
+    super(options);
+  }
+
   /**
-   * @constructor
-   * @param {Item5e} item     The item to whom this config belongs.
+   * The item being updated.
+   * @type {Item5e}
    */
-  constructor(item) {
-    super(item);
-    this.item = item;
+  get item() {
+    return this.document;
   }
 
   /** @override */
-  static get defaultOptions() {
-    return foundry.utils.mergeObject(super.defaultOptions, {
-      template: `modules/${Module.ID}/templates/save_config.hbs`,
-      classes: [Module.ID, "save-config"],
+  static DEFAULT_OPTIONS = {
+    classes: [Module.ID, "save-config"],
+    tag: "form",
+    position: {
       height: "auto",
-      wdith: "auto"
-    });
-  }
+      width: 400
+    },
+    window: {
+      icon: "fa-solid fa-person-falling-burst",
+      contentClasses: ["standard-form"]
+    },
+    form: {
+      submitOnChange: false,
+      closeOnSubmit: true
+    }
+  };
 
   /** @override */
-  get id() {
-    return `${Module.ID}-saveconfig-${this.item.uuid.replaceAll(".", "-")}`;
-  }
+  static PARTS = {
+    form: {template: "modules/rollgroups/templates/save-config.hbs"},
+    footer: {template: "modules/rollgroups/templates/footer.hbs"}
+  };
 
   /** @override */
   get title() {
@@ -578,21 +592,31 @@ class SaveConfig extends FormApplication {
   }
 
   /** @override */
-  async getData() {
-    const data = await super.getData();
+  async _prepareContext(options) {
+    const context = {};
+
     const config = new Set(this.item.flags[Module.ID]?.config?.saves ?? []);
-    data.abilities = Object.entries(CONFIG[Module.system.toUpperCase()].abilities).reduce((acc, [key, data]) => {
+    context.abilities = Object.entries(CONFIG[Module.system.toUpperCase()].abilities).map(([key, data]) => {
       const disabled = key === this.item.system.save.ability;
-      const checked = !disabled && config.has(key);
-      acc.push({key, checked, label: data.label, disabled});
-      return acc;
-    }, []);
-    return data;
+      const value = !disabled && config.has(key);
+      const field = new foundry.data.fields.BooleanField({label: data.label});
+      const name = `flags.rollgroups.config.saves.${key}`;
+      return {field: field, value: value, name: name, disabled: disabled, rootId: this.item.id};
+    });
+
+    return context;
   }
 
   /** @override */
-  async _updateObject(event, formData) {
-    return this.item.setFlag(Module.ID, "config.saves", formData.saves.filter(u => u));
+  _prepareSubmitData(event, form, formData) {
+    const submitData = super._prepareSubmitData(event, form, formData);
+    const path = "flags.rollgroups.config.saves";
+    const value = Object.entries(foundry.utils.getProperty(submitData, path) || {}).reduce((acc, [k, v]) => {
+      if (v) acc.push(k);
+      return acc;
+    }, []);
+    foundry.utils.setProperty(submitData, path, value);
+    return submitData;
   }
 }
 
