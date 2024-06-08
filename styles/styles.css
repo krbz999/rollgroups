@@ -63,11 +63,6 @@
   }
 }
 
-/* SAVE CONFIG */
-.rollgroups.save-config {
-  width: 300px;
-}
-
 /* CONFIG BUTTON */
 .dnd5e.sheet.item h4 .rollgroups.config-button {
   float: right;

@@ -564,7 +564,6 @@ class SaveConfig extends HandlebarsApplicationMixin(DocumentSheetV2) {
 
   /** @override */
   static DEFAULT_OPTIONS = {
-    classes: [Module.ID, "save-config"],
     tag: "form",
     position: {
       height: "auto",
