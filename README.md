@@ -33,4 +33,4 @@ The module has additional support for blade cantrips such as 'Booming Blade' and
 </p>
 
 ## Macros
-The function `Item#rollDamageGroup` is added and works exactly as `Item#rollDamage`, and in addition accepts the key `rollgroup`, which is an integer denoting which group to roll (starting at zero).
+The function `Item5e#rollDamageGroup` is added and works exactly as `Item5e#rollDamage`, and in addition accepts the key `rollgroup`, which is an integer denoting which group to roll (starting at zero).
