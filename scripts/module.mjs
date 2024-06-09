@@ -11,7 +11,6 @@ class Module {
     Hooks.on("renderChatMessage", this.createChatLogListeners);
     Hooks.on("renderItemSheet", this.createConfigButton);
     Item.implementation.prototype.rollDamageGroup = this.rollDamageGroup;
-    loadTemplates(["modules/rollgroups/templates/column.hbs"]);
   }
 
   /**
@@ -155,7 +154,7 @@ class Module {
         ${game.i18n.localize("ROLLGROUPS.GroupConfig")} <i class="fa-solid fa-edit"></i>
       </a>`;
       if (sheet.isEditable) {
-        div.querySelector("A").addEventListener("click", () => new GroupConfig(sheet.document).render(true));
+        div.querySelector("A").addEventListener("click", () => new GroupConfig({document: sheet.document}).render({force: true}));
       }
       addDamage.after(div.firstElementChild);
     }
@@ -374,194 +373,139 @@ class Module {
   }
 }
 
-class GroupConfig extends FormApplication {
-  /**
-   * @constructor
-   * @param {Item5e} item     The item to whom this config belongs.
-   */
-  constructor(item) {
-    super(item);
-    this.item = item;
-    this.clone = item.clone({}, {keepId: true});
-    this.clone.prepareData();
-    this.clone.prepareFinalAttributes();
-  }
-
+class GroupConfig extends HandlebarsApplicationMixin(DocumentSheetV2) {
   /** @override */
-  static get defaultOptions() {
-    return foundry.utils.mergeObject(super.defaultOptions, {
-      template: `modules/${Module.ID}/templates/group_config.hbs`,
-      classes: [Module.ID, "group-config"],
+  static DEFAULT_OPTIONS = {
+    tag: "form",
+    classes: ["rollgroups", "group-config"],
+    position: {
       height: "auto",
-      wdith: "auto"
-    });
-  }
+      width: 400
+    },
+    window: {
+      icon: "fa-solid fa-burst",
+      contentClasses: ["standard-form"]
+    },
+    form: {
+      submitOnChange: true,
+      closeOnSubmit: false
+    },
+    actions: {
+      addGroup: this._onAddGroup,
+      deleteGroup: this._onDeleteGroup
+    }
+  };
 
   /** @override */
-  get id() {
-    return `${Module.ID}-groupconfig-${this.item.uuid.replaceAll(".", "-")}`;
-  }
+  static PARTS = {
+    form: {template: "modules/rollgroups/templates/group-config.hbs"}
+  };
 
   /** @override */
   get title() {
-    return game.i18n.format("ROLLGROUPS.GroupConfigName", {name: this.item.name});
+    return game.i18n.format("ROLLGROUPS.GroupConfigName", {name: this.document.name});
+  }
+
+  /** @override */
+  async _prepareContext(options) {
+    const context = {};
+
+    const types = foundry.utils.mergeObject(CONFIG.DND5E.damageTypes, CONFIG.DND5E.healingTypes, {inplace: false});
+    context.parts = this.document.system.toObject().damage.parts.map(([formula, type], idx) => {
+      const label = types[type]?.label || game.i18n.localize("None");
+      return {formula, label, idx};
+    });
+
+    const groups = foundry.utils.deepClone(this.document.getFlag("rollgroups", "config.groups") ?? []);
+    let i = 0;
+    for (const group of groups) {
+      const parts = new Set(group.parts || []);
+      group.idx = i;
+      group.rows = context.parts.map(p => ({
+        formula: p.formula,
+        label: p.label,
+        checked: parts.has(p.idx),
+        name: `flags.rollgroups.config.groups.${i}.parts.${p.idx}`
+      }));
+      i++;
+    }
+    context.groups = groups;
+
+    context.hasDamage = this.document.hasDamage;
+
+    // Set up versatile and versatile choices.
+    context.isVersatile = context.hasDamage && this.document.isVersatile;
+    if (context.isVersatile) {
+      const choices = groups.map(k => k.label || "ROLLGROUPS.GroupPlaceholder");
+      const value = this.document.getFlag("rollgroups", "config.versatile") ?? null;
+      context.versatile = {
+        field: new foundry.data.fields.NumberField({
+          nullable: true,
+          initial: null,
+          choices: choices,
+          label: "ROLLGROUPS.VersatileGroup",
+          hint: "ROLLGROUPS.VersatileTooltip"
+        }),
+        value: (value < choices.length) ? value : null,
+        name: "flags.rollgroups.config.versatile"
+      };
+    }
+
+    // Set up blade cantrip function.
+    context.isCantrip = context.hasDamage && (this.document.type === "spell") && (this.document.system.level === 0);
+    if (context.isCantrip) {
+      context.cantrip = {
+        field: new foundry.data.fields.BooleanField({
+          label: "ROLLGROUPS.BladeCantrip",
+          hint: "ROLLGROUPS.BladeCantripTooltip"
+        }),
+        value: !!this.document.getFlag("rollgroups", "config.bladeCantrip"),
+        name: "flags.rollgroups.config.bladeCantrip"
+      };
+    }
+
+    return context;
+  }
+
+  /** @override */
+  _prepareSubmitData(event, target, formData) {
+    const submitData = super._prepareSubmitData(event, target, formData);
+    const groups = [];
+    const path = "flags.rollgroups.config.groups";
+    for (const [{label, parts}] of Object.values(foundry.utils.getProperty(submitData, path) ?? {})) {
+      const p = [];
+      for (const [k, v] of Object.entries(parts || {})) if (v) p.push(parseInt(k));
+      groups.push({label: label || game.i18n.localize("ROLLGROUPS.GroupPlaceholder"), parts: p});
+    }
+    foundry.utils.setProperty(submitData, path, groups);
+    return submitData;
   }
 
   /**
-   * Get the damage parts of an item, filtered for valid ones only.
-   * @returns {string[][]}     The array of array of formulas and types.
-   */
-  get parts() {
-    return this.clone.system.damage.parts;
-  }
-
-  /** @override */
-  getData() {
-    const data = {};
-    const system = Module.system.toUpperCase();
-    const types = {...CONFIG[system].damageTypes, ...CONFIG[system].healingTypes};
-
-    // construct the left column of formulas.
-    data.parts = this.parts.reduce((acc, [formula, type]) => {
-      const locale = types[type]?.label ?? game.i18n.localize("None");
-      acc.push({label: `${formula} (${locale})`});
-      return acc;
-    }, []);
-
-    // construct the group columns.
-    data.groups = this.columnHelper();
-
-    // Values and labels for 'Versatile' select.
-    data.versatile = this.item.isVersatile;
-    data.choices = this.clone.flags[Module.ID]?.config?.groups?.map((g, n) => ({
-      value: n,
-      label: g.label || "ROLLGROUPS.GroupPlaceholder"
-    })) ?? [];
-    data.selected = this.clone.flags[Module.ID]?.config?.versatile;
-
-    // If it can be and is a blade cantrip.
-    data.eligibleBladeCantrip = (this.item.type === "spell") && (this.item.system.level === 0) && this.item.hasDamage;
-    data.isBladeCantrip = this.clone.flags[Module.ID]?.config?.bladeCantrip;
-
-    return data;
-  }
-
-  /** @override */
-  async _updateObject(event, formData) {
-    const data = new this.model(foundry.utils.expandObject(formData ?? {})?.flags?.rollgroups?.config ?? {}).toObject();
-    for (const group of data.groups) group.parts = group.parts.filter(p => p !== null);
-    data.groups = data.groups.filter(g => g.parts.length > 0);
-    return this.item.setFlag(Module.ID, "config", data);
-  }
-
-  /** @override */
-  activateListeners(html) {
-    super.activateListeners(html);
-    html[0].querySelectorAll("[data-action='add']").forEach(n => {
-      n.addEventListener("click", this._onClickAdd.bind(this));
-    });
-    html[0].querySelectorAll("[data-action='delete']").forEach(n => {
-      n.addEventListener("click", this._onClickDelete.bind(this));
-    });
-    html[0].querySelectorAll(".focus").forEach(n => {
-      n.addEventListener("focus", this._onFocusName.bind(this));
-    });
-  }
-
-  /**
-   * Handle adding a new column.
+   * Handle adding a new group.
    * @param {PointerEvent} event      The initiating click event.
+   * @param {HTMLElement} target      Targeted element.
    */
-  async _onClickAdd(event) {
-    const groups = this.clone.flags[Module.ID]?.config?.groups ?? [];
-    this.clone.updateSource({[`flags.${Module.ID}.config.groups`]: groups.concat([{label: "", parts: []}])});
-    this.render();
-  }
-
-  /** @override */
-  setPosition(pos = {}) {
-    pos.width = pos.height = "auto";
-    return super.setPosition(pos);
-  }
-
-  /**
-   * Change the presented labels in the 'Versatile' select when a group label changes.
-   * @override
-   */
-  _onChangeInput(event) {
-    const formData = new FormDataExtended(this.element[0].querySelector("FORM")).object;
-    const data = new this.model(foundry.utils.expandObject(formData).flags?.rollgroups?.config ?? {}).toObject();
-    for (const group of data.groups) group.parts = group.parts.filter(p => p !== null);
-    this.clone.updateSource({[`flags.${Module.ID}.config`]: data});
-    this.render();
-  }
-
-  /**
-   * The data model used for rendering and saving data.
-   * @type {DataModel}
-   */
-  get model() {
-    return class extends foundry.abstract.DataModel {
-      static defineSchema() {
-        const f = foundry.data.fields;
-        return {
-          bladeCantrip: new f.BooleanField({nullable: true, initial: null}),
-          versatile: new f.NumberField({nullable: true, initial: null}),
-          groups: new f.ArrayField(new f.SchemaField({
-            label: new f.StringField({required: true}),
-            parts: new f.ArrayField(new f.NumberField())
-          }))
-        };
-      }
-    };
-  }
-
-  /**
-   * Focus a selected name element.
-   * @param {Event} event      The initiating focus event.
-   */
-  _onFocusName(event) {
-    event.currentTarget.select();
+  static _onAddGroup(event, target) {
+    const groups = foundry.utils.deepClone(this.document.getFlag("rollgroups", "config.groups") || []);
+    groups.push({label: "", parts: []});
+    this.document.setFlag("rollgroups", "config.groups", groups);
   }
 
   /**
    * Handle deleting a column.
-   * @param {Event} event      The initiating click event.
+   * @param {PointerEvent} event      The initiating click event.
+   * @param {HTMLElement} target      Targeted element.
    */
-  _onClickDelete(event) {
-    const groups = foundry.utils.deepClone(this.clone.flags[Module.ID]?.config?.groups ?? []);
-    groups.splice(event.currentTarget.dataset.idx, 1);
-    this.clone.updateSource({[`flags.${Module.ID}.config.groups`]: groups});
-    this.render();
-  }
-
-  /**
-   * Create the data for the existing column(s), or a new empty column if none exist.
-   * @returns {object[]}      An array of data objects for one or more columns.
-   */
-  columnHelper() {
-    // Get the columns for initial rendering when any exist.
-    const flags = this.clone.flags[Module.ID]?.config?.groups ?? [];
-    return flags.map(({label, parts}) => ({
-      label: label,
-      rows: Array.fromRange(this.parts.length).map(n => ({checked: parts.includes(n)}))
-    }));
+  static _onDeleteGroup(event, target) {
+    const groups = foundry.utils.deepClone(this.document.getFlag("rollgroups", "config.groups"));
+    const idx = parseInt(target.closest("[data-idx]").dataset.idx);
+    groups.splice(idx, 1);
+    this.document.setFlag("rollgroups", "config.groups", groups);
   }
 }
 
 class SaveConfig extends HandlebarsApplicationMixin(DocumentSheetV2) {
-  constructor(options) {
-    super(options);
-  }
-
-  /**
-   * The item being updated.
-   * @type {Item5e}
-   */
-  get item() {
-    return this.document;
-  }
-
   /** @override */
   static DEFAULT_OPTIONS = {
     tag: "form",
@@ -587,20 +531,20 @@ class SaveConfig extends HandlebarsApplicationMixin(DocumentSheetV2) {
 
   /** @override */
   get title() {
-    return game.i18n.format("ROLLGROUPS.SaveConfigName", {name: this.item.name});
+    return game.i18n.format("ROLLGROUPS.SaveConfigName", {name: this.document.name});
   }
 
   /** @override */
   async _prepareContext(options) {
     const context = {};
 
-    const config = new Set(this.item.flags[Module.ID]?.config?.saves ?? []);
+    const config = new Set(this.document.flags[Module.ID]?.config?.saves ?? []);
     context.abilities = Object.entries(CONFIG[Module.system.toUpperCase()].abilities).map(([key, data]) => {
-      const disabled = key === this.item.system.save.ability;
+      const disabled = key === this.document.system.save.ability;
       const value = !disabled && config.has(key);
       const field = new foundry.data.fields.BooleanField({label: data.label});
       const name = `flags.rollgroups.config.saves.${key}`;
-      return {field: field, value: value, name: name, disabled: disabled, rootId: this.item.id};
+      return {field: field, value: value, name: name, disabled: disabled, rootId: this.document.id};
     });
 
     return context;

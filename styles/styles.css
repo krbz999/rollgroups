@@ -1,65 +1,36 @@
 /* GROUP CONFIG */
 .rollgroups.group-config {
-  .group {
-    min-width: 100px;
-    max-width: 100px;
+  max-height: 95%;
 
-    &:last-child .header {
-      border-right: groove;
-    }
-  }
-
-  .legend {
-    min-width: 100px;
-    max-width: 200px;
-
-    .header {
-      border-left: groove;
-      font-weight: bold;
-    }
-  }
-
-  .inputs {
+  .content {
+    gap: 1rem;
     display: flex;
-  }
+    flex-direction: column;
 
-  [data-action] {
-    border-top: 1px gray groove;
-    padding: 6px 0 10px 0;
-    display: flex;
-    justify-content: center;
-  }
-
-  .header, .row {
-    min-height: 35px;
-    max-height: 35px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    overflow: hidden;
-    white-space: nowrap;
-  }
-
-  [type="checkbox"]:focus {
-    outline: auto;
-  }
-
-  [type="text"] {
-    border-radius: 8px;
-    background-color: lightgray;
-
-    &::placeholder {
-      color: dimgray;
-      font-style: italic;
+    & [data-action=addGroup] {
+      min-height: calc(1.25* var(--input-height));
     }
-  }
 
-  .header {
-    padding: 2px 4px;
-    border-top: groove;
-    border-bottom: groove;
-    background-color: darkgray;
+    & fieldset[data-idx] {
+      & legend {
+        display: flex;
+        gap: 0.5rem;
+
+        & input {
+          flex: 0 0 100px;
+          width: 100px;
+        }
+
+        & button {
+          flex: 0 0 20px;
+
+          .fa-solid {
+            margin: 0;
+            padding: 0;
+          }
+        }
+      }
+    }
   }
 }
 

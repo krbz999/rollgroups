@@ -1,0 +1,33 @@
+<div class="content scrollable">
+  {{#if (or isVersatile isCantrip)}}
+  <fieldset>
+    <legend>{{localize "Configure"}}</legend>
+    {{#if isCantrip}} {{formGroup cantrip.field value=cantrip.value name=cantrip.name localize=true}} {{/if}}
+    {{#if isVersatile}} {{formGroup versatile.field value=versatile.value name=versatile.name localize=true blank=""}} {{/if}}
+  </fieldset>
+  {{/if}}
+
+  <button type="button" data-action="addGroup">
+    <i class="fa-solid fa-plus"></i>
+  </button>
+
+  {{#each groups}}
+  <fieldset data-idx="{{idx}}">
+    <legend>
+      <input type="text" name="flags.rollgroups.config.groups.{{idx}}.label" value="{{label}}">
+      <button type="button" data-action="deleteGroup">
+        <i class="fa-solid fa-trash"></i>
+      </button>
+    </legend>
+
+    {{#each rows}}
+    <div class="form-group">
+      <label>{{formula}} ({{label}})</label>
+      <div class="form-fields">
+        <input type="checkbox" name="{{name}}" {{checked checked}}>
+      </div>
+    </div>
+    {{/each}}
+  </fieldset>
+  {{/each}}
+</div>
