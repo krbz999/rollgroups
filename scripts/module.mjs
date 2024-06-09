@@ -472,7 +472,7 @@ class GroupConfig extends HandlebarsApplicationMixin(DocumentSheetV2) {
     const submitData = super._prepareSubmitData(event, target, formData);
     const groups = [];
     const path = "flags.rollgroups.config.groups";
-    for (const [{label, parts}] of Object.values(foundry.utils.getProperty(submitData, path) ?? {})) {
+    for (const {label, parts} of Object.values(foundry.utils.getProperty(submitData, path) ?? {})) {
       const p = [];
       for (const [k, v] of Object.entries(parts || {})) if (v) p.push(parseInt(k));
       groups.push({label: label || game.i18n.localize("ROLLGROUPS.GroupPlaceholder"), parts: p});
